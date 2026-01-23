@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { Search, ShoppingCart, Lock, Unlock } from "lucide-react";
 
-const CONTRACT_ADDRESS = "0x..."; // Same as above
+const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0x...";
 const ABI = [
     "function contentCount() view returns (uint256)",
     "function contents(uint256) view returns (uint256 id, string title, string description, string previewUrl, string contentHash, uint256 price, address creator, uint256 royaltyPercentage, bool isActive)",
