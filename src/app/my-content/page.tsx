@@ -23,6 +23,9 @@ export default function MyAssetsPage() {
     const fetchPurchasedContent = async () => {
         try {
             if (!window.ethereum) return;
+            if (!CONTRACT_ADDRESS || CONTRACT_ADDRESS === "0x...") {
+                throw new Error("Contract address is not configured.");
+            }
             const provider = new ethers.BrowserProvider(window.ethereum);
             const accounts = await provider.send("eth_requestAccounts", []);
             const address = accounts[0];

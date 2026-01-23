@@ -23,6 +23,9 @@ export default function LibraryPage() {
     const fetchContent = async () => {
         // In a real app, use a public RPC or the user's provider
         try {
+            if (!CONTRACT_ADDRESS || CONTRACT_ADDRESS === "0x...") {
+                throw new Error("Contract address is not configured.");
+            }
             const provider = new ethers.JsonRpcProvider("https://rpc-amoy.polygon.technology");
             const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
             const count = await contract.contentCount();
@@ -42,6 +45,9 @@ export default function LibraryPage() {
 
     const buyContent = async (id: number, price: bigint) => {
         try {
+            if (!CONTRACT_ADDRESS || CONTRACT_ADDRESS === "0x...") {
+                throw new Error("Contract address is not configured.");
+            }
             const provider = new ethers.BrowserProvider(window.ethereum);
             const signer = await provider.getSigner();
             const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);

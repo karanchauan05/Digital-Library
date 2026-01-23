@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 import { CloudUpload, FileText, Percent } from "lucide-react";
 
 // Add contract address and ABI here
-const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0x...";
+const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 const ABI = [
     "function registerContent(string _title, string _description, string _previewUrl, string _contentHash, uint256 _price, uint256 _royaltyPercentage) external"
 ];
@@ -36,6 +36,11 @@ export default function UploadPage() {
             // 2. Blockchain Transaction
             const provider = new ethers.BrowserProvider((window as any).ethereum);
             const signer = await provider.getSigner();
+
+            if (!CONTRACT_ADDRESS || CONTRACT_ADDRESS === "0x...") {
+                throw new Error("Contract address is not configured. Please add NEXT_PUBLIC_CONTRACT_ADDRESS to your deployment.");
+            }
+
             const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
 
             const tx = await contract.registerContent(
