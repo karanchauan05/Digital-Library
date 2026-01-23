@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import axios from "axios";
 
 export async function POST(request: Request) {
     try {
@@ -10,27 +9,38 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: "No file provided" }, { status: 400 });
         }
 
-        // Convert the file to a Buffer for axios/form-data compatibility in Node.js
-        const bytes = await file.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-
         const pinataFormData = new FormData();
-        // Append as a Blob/File which is supported in the new Node.js fetch/FormData
-        pinataFormData.append("file", new Blob([buffer]), file.name);
+        pinataFormData.append("file", file);
 
-        const res = await axios.post("https://api.pinata.cloud/pinning/pinFileToIPFS", pinataFormData, {
-            headers: {
-                'pinata_api_key': process.env.PINATA_API_KEY,
-                'pinata_secret_api_key': process.env.PINATA_SECRET_API_KEY,
-            },
+        const pinataKey = process.env.PINATA_API_KEY;
+        const pinataSecret = process.env.PINATA_SECRET_API_KEY;
+
+        const headers: any = {};
+
+        // SMART AUTH: Detect if the secret is actually a JWT (starts with eyJ)
+        if (pinataSecret?.startsWith('eyJ')) {
+            headers['Authorization'] = `Bearer ${pinataSecret}`;
+        } else {
+            headers['pinata_api_key'] = pinataKey;
+            headers['pinata_secret_api_key'] = pinataSecret;
+        }
+
+        const res = await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
+            method: "POST",
+            headers: headers,
+            body: pinataFormData,
         });
 
-        return NextResponse.json({ ipfsHash: res.data.IpfsHash });
+        const data = await res.json();
+
+        if (!res.ok) {
+            console.error("Pinata Error:", data);
+            return NextResponse.json({ error: data.error || "Pinata upload failed" }, { status: res.status });
+        }
+
+        return NextResponse.json({ ipfsHash: data.IpfsHash });
     } catch (error: any) {
-        console.error("Pinata upload error:", error.response?.data || error.message);
-        return NextResponse.json({
-            error: error.message || "Failed to upload to IPFS",
-            details: error.response?.data
-        }, { status: 500 });
+        console.error("Server Error:", error);
+        return NextResponse.json({ error: error.message || "Internal Server Error" }, { status: 500 });
     }
 }
