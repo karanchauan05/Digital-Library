@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { Search, ShoppingCart, Lock, Unlock } from "lucide-react";
 
-const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0x...";
+// Deployed contract address on Polygon Amoy
+const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0x146cEd605d2BfF0Eee901AE210a24B18BD722d55";
 const ABI = [
     "function contentCount() view returns (uint256)",
     "function contents(uint256) view returns (uint256 id, string title, string description, string previewUrl, string contentHash, uint256 price, address creator, uint256 royaltyPercentage, bool isActive)",
@@ -21,15 +22,37 @@ export default function LibraryPage() {
     }, []);
 
     const fetchContent = async () => {
-        // In a real app, use a public RPC or the user's provider
         try {
             if (!CONTRACT_ADDRESS || CONTRACT_ADDRESS === "0x...") {
                 throw new Error("Contract address is not configured.");
             }
-            const provider = new ethers.JsonRpcProvider("https://rpc-amoy.polygon.technology");
-            const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
-            const count = await contract.contentCount();
 
+            // Try multiple RPCs for reliability
+            const rpcs = [
+                "https://rpc-amoy.polygon.technology",
+                "https://polygon-amoy-bor-rpc.publicnode.com",
+                "https://rpc.ankr.com/polygon_amoy"
+            ];
+
+            let provider;
+            let contract;
+            let success = false;
+
+            for (const rpc of rpcs) {
+                try {
+                    provider = new ethers.JsonRpcProvider(rpc);
+                    contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
+                    const count = await contract.contentCount(); // Test connection
+                    success = true;
+                    break;
+                } catch (e) {
+                    console.warn(`RPC ${rpc} failed, trying next...`);
+                }
+            }
+
+            if (!success || !contract) throw new Error("All RPC endpoints failed");
+
+            const count = await contract.contentCount();
             const fetchedItems = [];
             for (let i = 1; i <= Number(count); i++) {
                 const item = await contract.contents(i);
