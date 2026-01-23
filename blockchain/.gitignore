@@ -1,0 +1,10 @@
+node_modules
+artifacts
+cache
+.env
+deploy_log.txt
+final_deploy.txt
+*.js
+!hardhat.config.js
+!scripts/*.js
+!contracts/*.sol
