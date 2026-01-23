@@ -49,7 +49,12 @@ export default function UploadPage() {
                 getGatewayUrl(previewHash),
                 contentHash,
                 ethers.parseEther(price),
-                BigInt(royalty)
+                BigInt(royalty),
+                {
+                    // Polygon Amoy often requires a higher minimum priority fee
+                    maxPriorityFeePerGas: ethers.parseUnits("30", "gwei"),
+                    maxFeePerGas: ethers.parseUnits("35", "gwei"),
+                }
             );
 
             await tx.wait();
