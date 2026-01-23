@@ -38,7 +38,7 @@ export default function UploadPage() {
             const signer = await provider.getSigner();
 
             if (!CONTRACT_ADDRESS || CONTRACT_ADDRESS === "0x...") {
-                throw new Error("Contract address is not configured. Please add NEXT_PUBLIC_CONTRACT_ADDRESS to your deployment.");
+                throw new Error("ERROR_V2: Contract address missing even with fallback.");
             }
 
             const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
