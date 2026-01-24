@@ -69,7 +69,13 @@ export default function MyAssetsPage() {
                 if (hasAccess) {
                     const item = await contract.contents(i);
                     const fullHash = await contract.getContentHash(i);
-                    fetched.push({ ...item, fullHash });
+                    fetched.push({
+                        id: item.id ? item.id.toString() : i.toString(),
+                        title: item.title,
+                        description: item.description,
+                        previewUrl: item.previewUrl,
+                        fullHash
+                    });
                 }
             }
             setPurchasedItems(fetched);
@@ -144,7 +150,7 @@ export default function MyAssetsPage() {
                                         <p className="text-gray-500 text-xs line-clamp-1 max-w-xl">{item.description}</p>
                                         <div className="flex items-center gap-3 mt-1">
                                             <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
-                                                <Key className="w-3 h-3" /> Node #{item.id.toString().padStart(4, '0')}
+                                                <Key className="w-3 h-3" /> Node #{item.id?.toString().padStart(4, '0') || idx.toString().padStart(4, '0')}
                                             </span>
                                             <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Decrypted</span>
                                         </div>

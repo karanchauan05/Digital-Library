@@ -84,9 +84,12 @@ export default function DashboardPage() {
                 const item = await contract.contents(i);
                 if (item.creator.toLowerCase() === address.toLowerCase()) {
                     uploads.push({
-                        ...item,
                         id: Number(item.id),
-                        price: ethers.formatEther(item.price)
+                        title: item.title,
+                        description: item.description,
+                        previewUrl: item.previewUrl,
+                        price: ethers.formatEther(item.price),
+                        isActive: item.isActive
                     });
                     if (item.isActive) active++;
                 }

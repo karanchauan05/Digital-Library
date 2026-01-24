@@ -53,7 +53,17 @@ export default function LibraryPage() {
             const fetchedItems = [];
             for (let i = 1; i <= Number(count); i++) {
                 const item = await contract.contents(i);
-                if (item.isActive) fetchedItems.push(item);
+                if (item.isActive) {
+                    fetchedItems.push({
+                        id: item.id,
+                        title: item.title,
+                        description: item.description,
+                        previewUrl: item.previewUrl,
+                        price: item.price,
+                        creator: item.creator,
+                        isActive: item.isActive
+                    });
+                }
             }
             setItems(fetchedItems.reverse());
         } catch (err) {
