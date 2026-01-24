@@ -3,35 +3,33 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 15, 23, 42;
-  --background-end-rgb: 0, 0, 0;
+  --foreground-rgb: 15, 23, 42;
+  --background-start-rgb: 255, 255, 255;
+  --background-end-rgb: 242, 244, 247;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+  background: white;
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
 }
 
 @layer components {
   .glass {
-    @apply bg-white bg-opacity-[0.03] backdrop-blur-lg border border-white border-opacity-[0.05] shadow-2xl;
+    @apply bg-white/70 backdrop-blur-xl border border-slate-200 shadow-xl;
   }
 
   .glass-card {
-    @apply glass rounded-[2rem] p-6 border border-white/10 hover:border-primary/50 transition-all duration-500 shadow-2xl shadow-black/40 hover:shadow-[0_8px_30px_#6366f11a];
+    @apply bg-white rounded-xl p-6 border border-slate-200 transition-all duration-500 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-primary/10;
   }
 
   .btn-primary {
-    @apply px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-2xl font-bold tracking-tight transition-all duration-300 hover:opacity-90 hover:shadow-[0_8px_30px_#6366f14d] active:scale-95 disabled:opacity-50;
+    @apply px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-lg font-bold tracking-tight transition-all duration-300 hover:opacity-90 hover:shadow-lg active:scale-95 disabled:opacity-50;
   }
 
   .btn-secondary {
-    @apply px-6 py-3 glass rounded-2xl font-bold tracking-tight transition-all duration-300 hover:bg-white/10 active:scale-95;
+    @apply px-6 py-3 bg-slate-100/50 border border-slate-200 rounded-lg font-bold tracking-tight transition-all duration-300 hover:bg-slate-100 active:scale-95;
   }
 }
 
@@ -41,18 +39,11 @@ body {
 
 @keyframes glow {
   from {
-    text-shadow: 0 0 10px rgba(99, 102, 241, 0.2), 0 0 20px rgba(99, 102, 241, 0.1);
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.2), 0 0 20px rgba(59, 130, 246, 0.1);
   }
 
   to {
-    text-shadow: 0 0 20px rgba(99, 102, 241, 0.6), 0 0 40px rgba(168, 85, 247, 0.4);
-  }
-}
-
-/* ANTI-PIRACY PROTECTION */
-@media print {
-  body {
-    display: none !important;
+    text-shadow: 0 0 20px rgba(59, 130, 246, 0.6), 0 0 40px rgba(6, 182, 212, 0.4);
   }
 }
 
@@ -66,7 +57,7 @@ body {
   width: 100%;
   height: 80vh;
   background: #111;
-  border-radius: 1.5rem;
+  border-radius: 0.75rem;
   overflow: hidden;
 }
 

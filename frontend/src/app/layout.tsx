@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={inter.className}>
+            <body className={`${inter.className} antialiased bg-white`}>
                 <div className="fixed inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] -z-10 opacity-20"></div>
                 <Navbar />
                 <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 mt-10">

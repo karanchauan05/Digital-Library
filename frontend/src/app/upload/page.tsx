@@ -73,8 +73,8 @@ export default function UploadPage() {
                     className="w-full lg:w-1/3 space-y-8"
                 >
                     <div className="space-y-4 text-center lg:text-left">
-                        <h2 className="text-4xl font-black italic tracking-tighter">
-                            Upload <br /> <span className="text-primary italic">Content</span>
+                        <h2 className="text-4xl font-black tracking-tighter">
+                            Upload <br /> <span className="text-primary">Content</span>
                         </h2>
                         <p className="text-gray-500 font-medium tracking-tight">Protect your educational IP with blockchain encryption and earn automated royalties.</p>
                     </div>
@@ -85,7 +85,7 @@ export default function UploadPage() {
                             { icon: HardDrive, title: "Decentralized Hosting", desc: "Permanently stored on IPFS node network." },
                             { icon: IndianRupee, title: "Automated Royalties", desc: "Direct peer-to-peer payments on the blockchain." }
                         ].map((stat, i) => (
-                            <div key={i} className="glass border-white/5 p-4 rounded-2xl flex gap-4">
+                            <div key={i} className="glass border-slate-200 p-4 rounded-xl flex gap-4">
                                 <div className="p-2 bg-primary/10 rounded-lg h-fit">
                                     <stat.icon className="w-5 h-5 text-primary" />
                                 </div>
@@ -104,7 +104,7 @@ export default function UploadPage() {
                     animate={{ opacity: 1, x: 0 }}
                     className="flex-grow"
                 >
-                    <form onSubmit={handleSubmit} className="glass-card !p-10 space-y-8 !rounded-[3rem] relative overflow-hidden">
+                    <form onSubmit={handleSubmit} className="glass-card !p-10 space-y-8 !rounded-xl relative overflow-hidden">
                         <AnimatePresence>
                             {status !== "idle" && (
                                 <motion.div
@@ -122,14 +122,14 @@ export default function UploadPage() {
                                             <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto shadow-[0_0_30px_#22c55e]">
                                                 <CheckCircle2 className="w-10 h-10 text-white" />
                                             </div>
-                                            <h3 className="text-2xl font-black italic uppercase">Upload Successful!</h3>
-                                            <p className="text-gray-500 font-medium italic">Your content is now live on the Polygon Amoy Testnet.</p>
+                                            <h3 className="text-2xl font-black uppercase">Upload Successful!</h3>
+                                            <p className="text-gray-500 font-medium">Your content is now live on the Polygon Amoy Testnet.</p>
                                         </motion.div>
                                     ) : (
                                         <>
                                             <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin" />
                                             <div className="space-y-2">
-                                                <h3 className="text-xl font-bold italic tracking-widest animate-pulse">
+                                                <h3 className="text-xl font-bold tracking-widest animate-pulse">
                                                     {status === "ipfs-preview" && "Uploading Preview..."}
                                                     {status === "ipfs-full" && "Uploading Full Content..."}
                                                     {status === "blockchain" && "Registering on Blockchain..."}
@@ -148,7 +148,7 @@ export default function UploadPage() {
                                     <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2 block">Content Title</label>
                                     <input
                                         type="text"
-                                        className="w-full glass bg-white/[0.02] border-white/10 rounded-2xl py-4 px-6 outline-none focus:ring-2 focus:ring-primary/50 transition-all font-bold"
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-lg py-4 px-6 outline-none focus:ring-2 focus:ring-primary/50 focus:bg-white transition-all font-bold"
                                         placeholder="Enter Title..."
                                         value={title}
                                         onChange={(e) => setTitle(e.target.value)}
@@ -158,7 +158,7 @@ export default function UploadPage() {
                                 <div>
                                     <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2 block">Description</label>
                                     <textarea
-                                        className="w-full glass bg-white/[0.02] border-white/10 rounded-2xl py-4 px-6 outline-none focus:ring-2 focus:ring-primary/50 transition-all font-bold h-32"
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-lg py-4 px-6 outline-none focus:ring-2 focus:ring-primary/50 focus:bg-white transition-all font-bold h-32"
                                         placeholder="Describe your content..."
                                         value={description}
                                         onChange={(e) => setDescription(e.target.value)}
@@ -174,7 +174,7 @@ export default function UploadPage() {
                                         <input
                                             type="number"
                                             step="0.001"
-                                            className="w-full glass bg-white/[0.02] border-white/10 rounded-2xl py-4 px-6 outline-none focus:ring-2 focus:ring-primary/50 transition-all font-bold"
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-lg py-4 px-6 outline-none focus:ring-2 focus:ring-primary/50 focus:bg-white transition-all font-bold"
                                             placeholder="0.05"
                                             value={price}
                                             onChange={(e) => setPrice(e.target.value)}
@@ -185,7 +185,7 @@ export default function UploadPage() {
                                         <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2 block">Royalty (%)</label>
                                         <input
                                             type="number"
-                                            className="w-full glass bg-white/[0.02] border-white/10 rounded-2xl py-4 px-6 outline-none focus:ring-2 focus:ring-primary/50 transition-all font-bold"
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-lg py-4 px-6 outline-none focus:ring-2 focus:ring-primary/50 focus:bg-white transition-all font-bold"
                                             placeholder="10"
                                             value={royalty}
                                             onChange={(e) => setRoyalty(e.target.value)}
@@ -205,7 +205,7 @@ export default function UploadPage() {
                                                 accept="image/*"
                                                 required
                                             />
-                                            <div className="glass bg-white/[0.02] border-white/10 rounded-2xl p-4 flex items-center justify-between group-hover/file:bg-white/[0.05] transition-colors border-dashed border-2">
+                                            <div className="bg-slate-50 border-slate-200 rounded-lg p-4 flex items-center justify-between group-hover/file:bg-slate-100 transition-colors border-dashed border-2">
                                                 <span className="text-xs font-bold text-gray-400">{preview ? preview.name : "Select Preview"}</span>
                                                 <FileText className="w-5 h-5 text-primary opacity-50" />
                                             </div>
@@ -220,7 +220,7 @@ export default function UploadPage() {
                                                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                                                 required
                                             />
-                                            <div className="glass bg-white/[0.02] border-white/10 rounded-2xl p-4 flex items-center justify-between group-hover/file:bg-white/[0.05] transition-colors border-dashed border-2">
+                                            <div className="bg-slate-50 border-slate-200 rounded-lg p-4 flex items-center justify-between group-hover/file:bg-slate-100 transition-colors border-dashed border-2">
                                                 <span className="text-xs font-bold text-gray-400">{file ? file.name : "Select Data"}</span>
                                                 <CloudUpload className="w-5 h-5 text-primary opacity-50" />
                                             </div>
@@ -232,7 +232,7 @@ export default function UploadPage() {
 
                         <button
                             type="submit"
-                            className="w-full btn-primary !py-6 !rounded-3xl text-xl font-bold uppercase italic tracking-widest"
+                            className="w-full btn-primary !py-6 !rounded-lg text-xl font-bold uppercase tracking-widest"
                         >
                             Publish Content
                         </button>

@@ -96,7 +96,7 @@ export default function LibraryPage() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                 >
-                    <h2 className="text-4xl font-black italic tracking-tighter flex items-center gap-3">
+                    <h2 className="text-4xl font-black tracking-tighter flex items-center gap-3">
                         <BookOpen className="text-primary w-10 h-10" />
                         Discover Content
                     </h2>
@@ -115,7 +115,7 @@ export default function LibraryPage() {
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             placeholder="Search content..."
-                            className="w-full glass bg-white/[0.02] border-white/10 py-4 pl-12 pr-4 rounded-2xl outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium"
+                            className="w-full bg-slate-50 border border-slate-200 py-4 pl-12 pr-4 rounded-lg outline-none focus:ring-2 focus:ring-primary/50 focus:bg-white transition-all font-medium"
                         />
                     </div>
                 </motion.div>
@@ -138,7 +138,7 @@ export default function LibraryPage() {
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ delay: idx * 0.1 }}
                                 whileHover={{ y: -10 }}
-                                className="glass-card flex flex-col group !p-0 overflow-hidden !rounded-[2.5rem] bg-white/[0.01]"
+                                className="glass-card flex flex-col group !p-0 overflow-hidden !rounded-xl bg-white"
                             >
                                 {/* Item Image */}
                                 <div className="relative h-56 overflow-hidden">
@@ -160,7 +160,7 @@ export default function LibraryPage() {
                                         {item.description}
                                     </p>
 
-                                    <div className="pt-6 border-t border-white/5 flex justify-between items-center">
+                                    <div className="pt-6 border-t border-slate-100 flex justify-between items-center">
                                         <div className="flex flex-col">
                                             <span className="text-[10px] uppercase font-bold text-gray-600">Creator</span>
                                             <span className="text-[10px] font-mono text-gray-400">
@@ -169,7 +169,7 @@ export default function LibraryPage() {
                                         </div>
                                         <button
                                             onClick={() => buyContent(Number(item.id), item.price)}
-                                            className="btn-primary flex items-center gap-3 px-6 py-3 rounded-2xl group/btn"
+                                            className="btn-primary flex items-center gap-3 px-6 py-3 rounded-lg group/btn"
                                         >
                                             <ShoppingCart className="w-4 h-4" />
                                             <span className="text-sm">Buy Access</span>
@@ -184,7 +184,7 @@ export default function LibraryPage() {
             )}
 
             {!loading && filteredItems.length === 0 && (
-                <div className="text-center py-40 glass rounded-[3rem]">
+                <div className="text-center py-40 glass rounded-xl">
                     <h3 className="text-2xl font-bold text-gray-500 uppercase">No Content Found</h3>
                     <p className="text-gray-600 font-medium mt-2">Be the first to upload!</p>
                 </div>

@@ -86,18 +86,18 @@ export default function MyAssetsPage() {
                     <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 border border-green-500/20 rounded-full text-[10px] font-bold uppercase tracking-widest text-green-500">
                         <Lock className="w-3 h-3" /> Anti-Piracy Shield Enabled
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-bold italic tracking-tighter italic leading-none">
-                        My Unlocked <br /> <span className="text-primary italic">Assets</span>
+                    <h2 className="text-4xl md:text-5xl font-bold tracking-tighter leading-none">
+                        My Unlocked <br /> <span className="text-primary">Assets</span>
                     </h2>
-                    <p className="text-gray-500 font-medium max-w-md italic">Securely access your purchased nodes. Printing and direct downloading are disabled for your security.</p>
+                    <p className="text-gray-500 font-medium max-w-md">Securely access your purchased nodes. Printing and direct downloading are disabled for your security.</p>
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <div className="glass-card !p-4 !rounded-2xl flex items-center gap-3">
+                    <div className="glass-card !p-4 !rounded-xl flex items-center gap-3">
                         <Database className="w-5 h-5 text-primary" />
                         <div>
                             <p className="text-[8px] font-bold text-gray-500 uppercase">Synchronized</p>
-                            <p className="text-sm font-bold italic">{purchasedItems.length} Assets</p>
+                            <p className="text-sm font-bold">{purchasedItems.length} Assets</p>
                         </div>
                     </div>
                 </div>
@@ -117,9 +117,9 @@ export default function MyAssetsPage() {
                                 initial={{ opacity: 0, scale: 0.95 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ delay: idx * 0.1 }}
-                                className="glass-card flex items-center gap-6 group hover:bg-white/[0.04] !p-6 !rounded-[2.5rem]"
+                                className="glass-card flex items-center gap-6 group hover:bg-slate-50 !p-6 !rounded-xl"
                             >
-                                <div className="relative w-24 h-24 rounded-2xl overflow-hidden glass border border-white/10 flex-shrink-0">
+                                <div className="relative w-24 h-24 rounded-lg overflow-hidden glass border border-slate-200 flex-shrink-0">
                                     <img
                                         src={item.previewUrl}
                                         className="w-full h-full object-cover group-hover:scale-125 transition-transform duration-700"
@@ -131,7 +131,7 @@ export default function MyAssetsPage() {
                                 <div className="flex flex-col justify-between py-1 flex-grow space-y-2">
                                     <div>
                                         <div className="flex items-center gap-2 mb-1">
-                                            <h3 className="font-bold text-xl italic uppercase tracking-tighter group-hover:text-primary transition-colors">{item.title}</h3>
+                                            <h3 className="font-bold text-xl uppercase tracking-tighter group-hover:text-primary transition-colors">{item.title}</h3>
                                             <div className="w-1.5 h-1.5 rounded-full bg-green-400 shadow-[0_0_8px_#4ade80]" />
                                         </div>
                                         <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1">
@@ -141,7 +141,7 @@ export default function MyAssetsPage() {
 
                                     <button
                                         onClick={() => setViewingPdf(getGatewayUrl(item.fullHash))}
-                                        className="btn-primary w-fit text-[10px] px-6 py-3 rounded-xl flex items-center gap-3 font-bold uppercase italic tracking-widest leading-none shadow-lg shadow-primary/20"
+                                        className="btn-primary w-fit text-[10px] px-6 py-3 rounded-lg flex items-center gap-3 font-bold uppercase tracking-widest leading-none shadow-lg shadow-primary/20"
                                     >
                                         <Eye className="w-3 h-3" />
                                         Open in Secure Viewer
@@ -167,8 +167,8 @@ export default function MyAssetsPage() {
                                 <div className="flex items-center gap-4 text-white">
                                     <ShieldCheck className="w-6 h-6 text-primary" />
                                     <div>
-                                        <h3 className="font-bold uppercase tracking-widest italic text-lg">Secure Node Access</h3>
-                                        <p className="text-[10px] text-gray-500 font-bold tracking-widest uppercase italic">Protection: Printing Blocked | Direct Downloads Disabled</p>
+                                        <h3 className="font-bold uppercase tracking-widest text-lg">Secure Node Access</h3>
+                                        <p className="text-[10px] text-gray-500 font-bold tracking-widest uppercase">Protection: Printing Blocked | Direct Downloads Disabled</p>
                                     </div>
                                 </div>
                                 <button
@@ -183,16 +183,16 @@ export default function MyAssetsPage() {
                                 <div className="pdf-overlay no-select" />
                                 <iframe
                                     src={`${viewingPdf}#toolbar=0&navpanes=0&scrollbar=0`}
-                                    className="w-full h-full border-none rounded-2xl"
+                                    className="w-full h-full border-none rounded-lg"
                                     title="EduChain Secure Reader"
                                 />
                                 {/* Anti-screenshot awareness */}
-                                <div className="absolute bottom-4 right-4 z-[60] bg-black/60 px-3 py-1 rounded-md text-[8px] font-bold text-gray-500 uppercase italic">
+                                <div className="absolute bottom-4 right-4 z-[60] bg-black/60 px-3 py-1 rounded-md text-[8px] font-bold text-gray-500 uppercase">
                                     Encrypted Viewport: Session ID {Math.random().toString(36).substring(7)}
                                 </div>
                             </div>
 
-                            <p className="text-center text-[10px] text-gray-700 font-bold uppercase tracking-[0.3em] italic">
+                            <p className="text-center text-[10px] text-gray-700 font-bold uppercase tracking-[0.3em]">
                                 Developed for EduChain Assets. Unauthorized redistribution is locked.
                             </p>
                         </div>
@@ -204,14 +204,14 @@ export default function MyAssetsPage() {
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="text-center py-40 glass rounded-[3rem] border-dashed border-2 border-white/5"
+                    className="text-center py-40 glass rounded-xl border-dashed border-2 border-slate-100"
                 >
                     <div className="p-6 bg-white/5 rounded-full w-fit mx-auto mb-6">
                         <Database className="w-10 h-10 text-gray-700" />
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-600 uppercase italic">Your Vault is Empty</h3>
-                    <p className="text-gray-600 font-medium italic mt-2">Acquire content from the library to unlock knowledge nodes.</p>
-                    <a href="/library" className="btn-secondary mt-8 inline-block px-10 py-4 !rounded-2xl font-bold italic tracking-widest uppercase">
+                    <h3 className="text-2xl font-bold text-gray-600 uppercase">Your Vault is Empty</h3>
+                    <p className="text-gray-600 font-medium mt-2">Acquire content from the library to unlock knowledge nodes.</p>
+                    <a href="/library" className="btn-secondary mt-8 inline-block px-10 py-4 !rounded-lg font-bold tracking-widest uppercase">
                         Explore Library
                     </a>
                 </motion.div>

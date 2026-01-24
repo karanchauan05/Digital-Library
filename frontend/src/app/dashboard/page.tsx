@@ -32,17 +32,17 @@ const StatCard = ({ label, value, icon: Icon, color, delay, subValue }: any) => 
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay, type: "spring", stiffness: 100 }}
-        className="glass-card relative overflow-hidden group p-6 border-white/5"
+        className="glass-card relative overflow-hidden group p-6 border-slate-100"
     >
         <div className={`absolute -right-8 -top-8 w-32 h-32 bg-gradient-to-br ${color} opacity-[0.03] blur-3xl group-hover:opacity-10 transition-opacity duration-700`} />
         <div className="flex items-start justify-between">
-            <div className={`p-4 rounded-2xl bg-gradient-to-br ${color} bg-opacity-10 backdrop-blur-md border border-white/10 shadow-lg`}>
-                <Icon className="w-6 h-6 text-white" />
+            <div className={`p-4 rounded-2xl bg-gradient-to-br ${color} bg-opacity-10 backdrop-blur-md border border-slate-200 shadow-lg`}>
+                <Icon className="w-6 h-6 text-primary" />
             </div>
             <div className="text-right">
                 <p className="text-[10px] uppercase tracking-widest text-gray-500 font-black">{label}</p>
-                <p className="text-3xl font-black mt-1 bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-500">{value}</p>
-                {subValue && <p className="text-[10px] text-green-500 font-bold mt-1">{subValue}</p>}
+                <p className="text-3xl font-black mt-1 bg-clip-text text-transparent bg-gradient-to-b from-slate-900 to-slate-500">{value}</p>
+                {subValue && <p className="text-[10px] text-green-600 font-bold mt-1">{subValue}</p>}
             </div>
         </div>
     </motion.div>
@@ -139,8 +139,8 @@ export default function DashboardPage() {
         <div className="max-w-7xl mx-auto space-y-10 pb-32">
             {/* Ultra-Modern Header */}
             <div className="relative group">
-                <div className="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-[3rem] blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
-                <div className="relative glass rounded-[2.5rem] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-10 border border-white/10">
+                <div className="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-xl blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
+                <div className="relative glass rounded-xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-10 border border-slate-200">
                     <div className="space-y-4 text-center md:text-left">
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}
@@ -149,9 +149,9 @@ export default function DashboardPage() {
                         >
                             <Cpu className="w-3 h-3" /> System Neural Link: Active
                         </motion.div>
-                        <h1 className="text-5xl md:text-6xl font-black tracking-tighter leading-none italic uppercase">
+                        <h1 className="text-5xl md:text-6xl font-black tracking-tighter leading-none uppercase">
                             Creator <br />
-                            <span className="text-primary italic">Terminal</span>
+                            <span className="text-primary">Terminal</span>
                         </h1>
                         <p className="text-gray-500 font-medium text-lg max-w-md">
                             Manage your decentralized educational nodes and monitor real-time royalty streams.
@@ -159,12 +159,12 @@ export default function DashboardPage() {
                     </div>
 
                     <div className="grid grid-cols-2 gap-4 w-full md:w-auto">
-                        <div className="glass-card p-4 flex flex-col items-center justify-center text-center !rounded-[2rem] bg-white/[0.02]">
+                        <div className="glass-card p-4 flex flex-col items-center justify-center text-center !rounded-xl bg-slate-50 border-slate-200">
                             <ShieldCheck className="w-8 h-8 text-primary mb-2" />
                             <p className="text-[10px] uppercase font-bold text-gray-500">Security</p>
                             <p className="text-sm font-black text-green-500">ENCRYPTED</p>
                         </div>
-                        <div className="glass-card p-4 flex flex-col items-center justify-center text-center !rounded-[2rem] bg-white/[0.02]">
+                        <div className="glass-card p-4 flex flex-col items-center justify-center text-center !rounded-xl bg-slate-50 border-slate-200">
                             <Zap className="w-8 h-8 text-yellow-500 mb-2" />
                             <p className="text-[10px] uppercase font-bold text-gray-500">Sync Speed</p>
                             <p className="text-sm font-black text-white">40ms</p>
@@ -212,8 +212,8 @@ export default function DashboardPage() {
                 {/* Left Listing Column */}
                 <div className="lg:col-span-2 space-y-6">
                     <div className="flex items-center justify-between px-2">
-                        <h3 className="text-xl font-black uppercase tracking-widest italic">Node Content</h3>
-                        <div className="h-[1px] flex-grow mx-6 bg-gradient-to-r from-white/10 to-transparent" />
+                        <h3 className="text-xl font-black uppercase tracking-widest">Node Content</h3>
+                        <div className="h-[1px] flex-grow mx-6 bg-gradient-to-r from-slate-200 to-transparent" />
                     </div>
 
                     <div className="space-y-4">
@@ -229,11 +229,11 @@ export default function DashboardPage() {
                                         key={item.id}
                                         initial={{ opacity: 0, scale: 0.98 }}
                                         animate={{ opacity: 1, scale: 1 }}
-                                        className={`glass-card p-5 flex items-center gap-6 group relative overflow-hidden transition-all duration-500 ${!item.isActive ? 'grayscale opacity-50' : 'hover:bg-white/[0.04]'}`}
+                                        className={`glass-card p-5 flex items-center gap-6 group relative overflow-hidden transition-all duration-500 ${!item.isActive ? 'grayscale opacity-50' : 'hover:bg-slate-50'}`}
                                     >
-                                        <div className="w-24 h-24 rounded-2xl overflow-hidden border border-white/10 relative flex-shrink-0">
+                                        <div className="w-24 h-24 rounded-lg overflow-hidden border border-slate-200 relative flex-shrink-0">
                                             <img src={item.previewUrl} className="w-full h-full object-cover transition duration-700 group-hover:scale-125" />
-                                            {!item.isActive && <div className="absolute inset-0 bg-black/80 flex items-center justify-center text-[10px] font-black tracking-widest text-white uppercase italic">Offline</div>}
+                                            {!item.isActive && <div className="absolute inset-0 bg-black/80 flex items-center justify-center text-[10px] font-black tracking-widest text-white uppercase">Offline</div>}
                                         </div>
 
                                         <div className="flex-grow">
@@ -245,7 +245,7 @@ export default function DashboardPage() {
                                             <div className="flex items-center gap-6 mt-4">
                                                 <div className="flex flex-col">
                                                     <span className="text-[8px] font-black uppercase text-gray-600">License Cost</span>
-                                                    <span className="text-sm font-black text-white">{item.price} POL</span>
+                                                    <span className="text-sm font-black text-slate-800">{item.price} POL</span>
                                                 </div>
                                                 <div className="flex flex-col">
                                                     <span className="text-[8px] font-black uppercase text-gray-600">Access ID</span>
@@ -257,13 +257,13 @@ export default function DashboardPage() {
                                         <div className="flex gap-2">
                                             <button
                                                 onClick={() => toggleStatus(item.id)}
-                                                className="p-4 rounded-2xl glass hover:bg-white/10 hover:text-primary transition-all duration-300"
+                                                className="p-4 rounded-lg glass hover:bg-white/10 hover:text-primary transition-all duration-300"
                                             >
                                                 {item.isActive ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5 text-primary" />}
                                             </button>
                                             <button
                                                 onClick={() => toggleStatus(item.id)}
-                                                className="p-4 rounded-2xl glass hover:bg-red-500/20 hover:text-red-500 transition-all duration-300"
+                                                className="p-4 rounded-lg glass hover:bg-red-500/20 hover:text-red-500 transition-all duration-300"
                                             >
                                                 <Trash2 className="w-5 h-5" />
                                             </button>
@@ -277,11 +277,11 @@ export default function DashboardPage() {
 
                 {/* Right Sidebar Info */}
                 <div className="space-y-6">
-                    <div className="glass-card p-8 space-y-8 !rounded-[3rem] bg-gradient-to-b from-primary/5 to-transparent border-primary/20">
+                    <div className="glass-card p-8 space-y-8 !rounded-xl bg-gradient-to-b from-primary/5 to-transparent border-primary/20">
                         <div className="text-center space-y-2">
                             <h3 className="text-xs font-black uppercase tracking-[0.3em] text-primary">Identity Verified</h3>
                             <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-primary to-secondary p-[2px] shadow-2xl shadow-primary/20">
-                                <div className="w-full h-full rounded-full bg-slate-950 flex items-center justify-center text-3xl font-black italic">
+                                <div className="w-full h-full rounded-full bg-slate-100 flex items-center justify-center text-3xl font-black text-primary">
                                     {userAddress.slice(2, 4).toUpperCase()}
                                 </div>
                             </div>
@@ -291,29 +291,29 @@ export default function DashboardPage() {
                         <div className="space-y-4 pt-4">
                             <div className="flex justify-between items-center text-sm">
                                 <span className="text-gray-500 font-bold uppercase text-[10px]">Total Revenue</span>
-                                <span className="font-black text-white">{stats.totalRevenue} POL</span>
+                                <span className="font-black text-slate-800">{stats.totalRevenue} POL</span>
                             </div>
-                            <div className="w-full h-[2px] bg-white/5 rounded-full" />
+                            <div className="w-full h-[2px] bg-slate-100 rounded-full" />
                             <div className="flex justify-between items-center text-sm">
                                 <span className="text-gray-500 font-bold uppercase text-[10px]">Smart Contract</span>
                                 <span className="font-mono text-[10px] text-primary">VERIFIED</span>
                             </div>
                         </div>
 
-                        <button className="w-full btn-primary !rounded-2xl py-4 flex items-center justify-center gap-3 group">
+                        <button className="w-full btn-primary !rounded-lg py-4 flex items-center justify-center gap-3 group">
                             <TrendingUp className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                             ANALYTICS HUB
                         </button>
                     </div>
 
-                    <div className="glass-card p-6 !rounded-[2rem] border-white/5 bg-white/[0.01]">
+                    <div className="glass-card p-6 !rounded-xl border-slate-100 bg-white">
                         <div className="flex items-center gap-3 mb-4">
                             <div className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse" />
                             <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Live Network Activity</h4>
                         </div>
                         <div className="space-y-3">
                             {[1, 2, 3].map((i) => (
-                                <div key={i} className="flex items-center justify-between text-[10px] font-bold text-gray-600 border-b border-white/5 pb-2">
+                                <div key={i} className="flex items-center justify-between text-[10px] font-bold text-gray-500 border-b border-slate-100 pb-2">
                                     <span>Sync Request #{740 + i}</span>
                                     <span className="text-green-500">COMPLETED</span>
                                 </div>
