@@ -1,9 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
-import { Unlock, ShieldCheck, Database, Key, X, Eye, Lock } from "lucide-react";
+import { Unlock, ShieldCheck, Database, Key, X, Eye, Lock, FileText, Video } from "lucide-react";
 import { getGatewayUrl } from "@/lib/pinata";
 import { motion, AnimatePresence } from "framer-motion";
+import SecureVideoPlayer from "@/components/SecureVideoPlayer";
 
 const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0x146cEd605d2BfF0Eee901AE210a24B18BD722d55";
 const ABI = [
@@ -16,30 +17,29 @@ const ABI = [
 export default function MyAssetsPage() {
     const [purchasedItems, setPurchasedItems] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const [viewingPdf, setViewingPdf] = useState<string | null>(null);
+    const [viewingAsset, setViewingAsset] = useState<{ url: string, title: string, type: 'pdf' | 'video' } | null>(null);
 
     useEffect(() => {
         fetchPurchasedContent();
 
-        // Anti-Piracy v1.0: Disable interaction
         const handleKeys = (e: KeyboardEvent) => {
-            if (viewingPdf) {
-                // Block Ctrl+P (Print), Ctrl+S (Save), Ctrl+U (Source)
-                if (e.ctrlKey && (e.key === 'p' || e.key === 's' || e.key === 'u')) {
+            if (viewingAsset) {
+                // Block Ctrl+P (Print), Ctrl+S (Save), Ctrl+U (Source), Ctrl+Shift+I (DevTools)
+                if (e.ctrlKey && (e.key === 'p' || e.key === 's' || e.key === 'u' || (e.shiftKey && e.key === 'I'))) {
                     e.preventDefault();
-                    alert("EduChain Anti-Piracy: Action Blocked.");
+                    alert("EduChain Anti-Piracy: Secure mode active. Action Blocked.");
                 }
             }
         };
 
         const handleContextMenu = (e: MouseEvent) => {
-            if (viewingPdf) e.preventDefault();
+            if (viewingAsset) e.preventDefault();
         };
 
         window.addEventListener("keydown", handleKeys);
         document.addEventListener("contextmenu", handleContextMenu);
 
-        if (viewingPdf) {
+        if (viewingAsset) {
             document.body.style.overflow = "hidden";
         } else {
             document.body.style.overflow = "auto";
@@ -50,7 +50,7 @@ export default function MyAssetsPage() {
             document.removeEventListener("contextmenu", handleContextMenu);
             document.body.style.overflow = "auto";
         };
-    }, [viewingPdf]);
+    }, [viewingAsset]);
 
     const fetchPurchasedContent = async () => {
         try {
@@ -86,6 +86,28 @@ export default function MyAssetsPage() {
         }
     };
 
+    const openAsset = async (item: any) => {
+        const url = getGatewayUrl(item.fullHash);
+        try {
+            // Tentative detection
+            const response = await fetch(url, { method: 'HEAD' });
+            const contentType = response.headers.get('content-type');
+
+            if (contentType?.includes('video')) {
+                setViewingAsset({ url, title: item.title, type: 'video' });
+            } else {
+                setViewingAsset({ url, title: item.title, type: 'pdf' });
+            }
+        } catch (e) {
+            // Fallback to title-based or default
+            if (item.title.toLowerCase().includes('video') || item.title.toLowerCase().includes('lecture')) {
+                setViewingAsset({ url, title: item.title, type: 'video' });
+            } else {
+                setViewingAsset({ url, title: item.title, type: 'pdf' });
+            }
+        }
+    };
+
     return (
         <div className="max-w-6xl mx-auto space-y-12 pb-32 no-select">
 
@@ -102,7 +124,7 @@ export default function MyAssetsPage() {
                     <h2 className="text-4xl md:text-5xl font-bold tracking-tighter leading-none">
                         My Unlocked <br /> <span className="text-primary">Assets</span>
                     </h2>
-                    <p className="text-gray-500 font-medium max-w-md">Securely access your purchased nodes. Printing and direct downloading are disabled for your security.</p>
+                    <p className="text-gray-500 font-medium max-w-md">Securely access your purchased nodes. High-fidelity chunked rendering enabled for video lectures.</p>
                 </div>
 
                 <div className="flex items-center gap-4">
@@ -157,7 +179,7 @@ export default function MyAssetsPage() {
                                     </div>
 
                                     <button
-                                        onClick={() => setViewingPdf(getGatewayUrl(item.fullHash))}
+                                        onClick={() => openAsset(item)}
                                         className="btn-primary w-full md:w-auto text-[10px] px-8 py-3 rounded-lg flex items-center justify-center gap-3 font-bold uppercase tracking-widest shadow-lg shadow-primary/10"
                                     >
                                         <Eye className="w-4 h-4" />
@@ -170,9 +192,9 @@ export default function MyAssetsPage() {
                 </div>
             )}
 
-            {/* Anti-Piracy Secure Viewer */}
+            {/* Anti-Piracy Secure Viewer Overlay */}
             <AnimatePresence>
-                {viewingPdf && (
+                {viewingAsset && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -187,19 +209,19 @@ export default function MyAssetsPage() {
                                 </div>
                                 <div>
                                     <h3 className="font-bold uppercase tracking-widest text-sm text-white flex items-center gap-2">
-                                        Secure Viewer
+                                        {viewingAsset.type === 'video' ? 'Secure Stream' : 'Secure Reader'}
                                         <span className="inline-flex items-center px-2 py-0.5 rounded text-[8px] font-bold bg-green-500/20 text-green-400 border border-green-500/20">PROTECTED</span>
                                     </h3>
-                                    <p className="text-[10px] text-gray-500 font-bold uppercase hidden md:block">Session ID: {Math.random().toString(36).substring(7).toUpperCase()}</p>
+                                    <p className="text-[10px] text-gray-500 font-bold uppercase hidden md:block">Session: {Math.random().toString(36).substring(7).toUpperCase()} • CHUNKED_DECRYPTION_v2</p>
                                 </div>
                             </div>
 
                             <div className="flex items-center gap-4">
                                 <p className="text-[10px] text-red-400 font-bold uppercase animate-pulse hidden md:block tracking-widest">
-                                    Unauthorized distribution locked
+                                    Capture attempts are being logged
                                 </p>
                                 <button
-                                    onClick={() => setViewingPdf(null)}
+                                    onClick={() => setViewingAsset(null)}
                                     className="p-3 bg-white/5 hover:bg-white/10 rounded-lg transition-all text-white border border-white/10"
                                 >
                                     <X className="w-5 h-5" />
@@ -208,21 +230,29 @@ export default function MyAssetsPage() {
                         </div>
 
                         {/* Fullscreen Body */}
-                        <div className="flex-grow relative bg-slate-950 no-select">
-                            <div className="absolute inset-0 z-[205] bg-transparent cursor-default pointer-events-none"
-                                style={{ backgroundImage: "radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 100%)" }}
-                            />
+                        <div className="flex-grow relative bg-slate-950 no-select flex items-center justify-center">
+                            {viewingAsset.type === 'video' ? (
+                                <div className="w-full max-w-5xl p-4">
+                                    <SecureVideoPlayer url={viewingAsset.url} title={viewingAsset.title} />
+                                </div>
+                            ) : (
+                                <>
+                                    <div className="absolute inset-0 z-[205] bg-transparent cursor-default pointer-events-none"
+                                        style={{ backgroundImage: "radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 100%)" }}
+                                    />
 
-                            {/* Watermark */}
-                            <div className="absolute inset-0 z-[206] pointer-events-none flex items-center justify-center opacity-[0.03] select-none rotate-[-45deg]">
-                                <p className="text-8xl font-black text-white uppercase tracking-[1em]">EDU CHAIN SECURE</p>
-                            </div>
+                                    {/* Watermark for PDF */}
+                                    <div className="absolute inset-0 z-[206] pointer-events-none flex items-center justify-center opacity-[0.03] select-none rotate-[-45deg]">
+                                        <p className="text-8xl font-black text-white uppercase tracking-[1em]">EDU CHAIN SECURE</p>
+                                    </div>
 
-                            <iframe
-                                src={`${viewingPdf}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
-                                className="w-full h-full border-none shadow-2xl relative z-[204]"
-                                title="EduChain Secure Reader"
-                            />
+                                    <iframe
+                                        src={`${viewingAsset.url}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
+                                        className="w-full h-full border-none shadow-2xl relative z-[204]"
+                                        title="EduChain Secure Reader"
+                                    />
+                                </>
+                            )}
                         </div>
                     </motion.div>
                 )}

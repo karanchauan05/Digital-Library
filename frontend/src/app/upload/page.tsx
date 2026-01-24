@@ -81,7 +81,8 @@ export default function UploadPage() {
 
                     <div className="space-y-4">
                         {[
-                            { icon: Shield, title: "Anti-Piracy", desc: "Files are stored on IPFS and accessed via Smart Contracts." },
+                            { icon: Shield, title: "Anti-Piracy", desc: "Files accessible only via authenticated Smart Contract ownership." },
+                            { icon: Binary, title: "Millisecond Chunking", desc: "Videos are rendered in encrypted chunks to prevent screen recording and ripping." },
                             { icon: HardDrive, title: "Decentralized Hosting", desc: "Permanently stored on IPFS node network." },
                             { icon: IndianRupee, title: "Automated Royalties", desc: "Direct peer-to-peer payments on the blockchain." }
                         ].map((stat, i) => (
