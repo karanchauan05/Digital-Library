@@ -39,9 +39,16 @@ export default function MyAssetsPage() {
         window.addEventListener("keydown", handleKeys);
         document.addEventListener("contextmenu", handleContextMenu);
 
+        if (viewingPdf) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
+
         return () => {
             window.removeEventListener("keydown", handleKeys);
             document.removeEventListener("contextmenu", handleContextMenu);
+            document.body.style.overflow = "auto";
         };
     }, [viewingPdf]);
 
@@ -109,42 +116,46 @@ export default function MyAssetsPage() {
                     <p className="text-gray-500 font-bold uppercase tracking-widest animate-pulse">Syncing Vault...</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
                     <AnimatePresence>
                         {purchasedItems.map((item, idx) => (
                             <motion.div
                                 key={item.id}
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ delay: idx * 0.1 }}
-                                className="glass-card flex items-center gap-6 group hover:bg-slate-50 !p-6 !rounded-xl"
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: idx * 0.05 }}
+                                className="glass-card flex flex-col md:flex-row items-center gap-6 group hover:bg-slate-50/80 !p-4 !rounded-xl border-slate-100"
                             >
-                                <div className="relative w-24 h-24 rounded-lg overflow-hidden glass border border-slate-200 flex-shrink-0">
+                                <div className="relative w-full md:w-32 h-40 md:h-24 rounded-lg overflow-hidden border border-slate-200 flex-shrink-0 bg-slate-50">
                                     <img
                                         src={item.previewUrl}
-                                        className="w-full h-full object-cover group-hover:scale-125 transition-transform duration-700"
+                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                         alt=""
                                     />
-                                    <div className="absolute inset-0 bg-green-500/10 mix-blend-overlay" />
+                                    <div className="absolute inset-0 bg-primary/5 mix-blend-overlay" />
                                 </div>
 
-                                <div className="flex flex-col justify-between py-1 flex-grow space-y-2">
-                                    <div>
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <h3 className="font-bold text-xl uppercase tracking-tighter group-hover:text-primary transition-colors">{item.title}</h3>
+                                <div className="flex flex-col md:flex-row flex-grow items-start md:items-center justify-between gap-4 w-full px-2">
+                                    <div className="space-y-1">
+                                        <div className="flex items-center gap-2">
+                                            <h3 className="font-bold text-lg uppercase tracking-tight group-hover:text-primary transition-colors line-clamp-1">{item.title}</h3>
                                             <div className="w-1.5 h-1.5 rounded-full bg-green-400 shadow-[0_0_8px_#4ade80]" />
                                         </div>
-                                        <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1">
-                                            <Key className="w-3 h-3" /> Fully Decrypted
-                                        </p>
+                                        <p className="text-gray-500 text-xs line-clamp-1 max-w-xl">{item.description}</p>
+                                        <div className="flex items-center gap-3 mt-1">
+                                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
+                                                <Key className="w-3 h-3" /> Node #{item.id.toString().padStart(4, '0')}
+                                            </span>
+                                            <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Decrypted</span>
+                                        </div>
                                     </div>
 
                                     <button
                                         onClick={() => setViewingPdf(getGatewayUrl(item.fullHash))}
-                                        className="btn-primary w-fit text-[10px] px-6 py-3 rounded-lg flex items-center gap-3 font-bold uppercase tracking-widest leading-none shadow-lg shadow-primary/20"
+                                        className="btn-primary w-full md:w-auto text-[10px] px-8 py-3 rounded-lg flex items-center justify-center gap-3 font-bold uppercase tracking-widest shadow-lg shadow-primary/10"
                                     >
-                                        <Eye className="w-3 h-3" />
-                                        Open in Secure Viewer
+                                        <Eye className="w-4 h-4" />
+                                        Access Node
                                     </button>
                                 </div>
                             </motion.div>
@@ -160,41 +171,52 @@ export default function MyAssetsPage() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-xl p-4 md:p-10"
+                        className="fixed inset-0 z-[200] flex flex-col bg-slate-900 overflow-hidden"
                     >
-                        <div className="relative w-full max-w-6xl h-full flex flex-col space-y-4">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-4 text-white">
-                                    <ShieldCheck className="w-6 h-6 text-primary" />
-                                    <div>
-                                        <h3 className="font-bold uppercase tracking-widest text-lg">Secure Node Access</h3>
-                                        <p className="text-[10px] text-gray-500 font-bold tracking-widest uppercase">Protection: Printing Blocked | Direct Downloads Disabled</p>
-                                    </div>
+                        {/* Fullscreen Header */}
+                        <div className="flex items-center justify-between px-6 py-4 bg-slate-900 border-b border-white/5 z-[210]">
+                            <div className="flex items-center gap-4 text-white">
+                                <div className="p-2 bg-primary/20 rounded-lg">
+                                    <ShieldCheck className="w-5 h-5 text-primary" />
                                 </div>
+                                <div>
+                                    <h3 className="font-bold uppercase tracking-widest text-sm text-white flex items-center gap-2">
+                                        Secure Viewer
+                                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[8px] font-bold bg-green-500/20 text-green-400 border border-green-500/20">PROTECTED</span>
+                                    </h3>
+                                    <p className="text-[10px] text-gray-500 font-bold uppercase hidden md:block">Session ID: {Math.random().toString(36).substring(7).toUpperCase()}</p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-4">
+                                <p className="text-[10px] text-red-400 font-bold uppercase animate-pulse hidden md:block tracking-widest">
+                                    Unauthorized distribution locked
+                                </p>
                                 <button
                                     onClick={() => setViewingPdf(null)}
-                                    className="p-3 glass rounded-full hover:bg-white/10 transition-colors text-white"
+                                    className="p-3 bg-white/5 hover:bg-white/10 rounded-lg transition-all text-white border border-white/10"
                                 >
-                                    <X className="w-6 h-6" />
+                                    <X className="w-5 h-5" />
                                 </button>
                             </div>
+                        </div>
 
-                            <div className="pdf-container group">
-                                <div className="pdf-overlay no-select" />
-                                <iframe
-                                    src={`${viewingPdf}#toolbar=0&navpanes=0&scrollbar=0`}
-                                    className="w-full h-full border-none rounded-lg"
-                                    title="EduChain Secure Reader"
-                                />
-                                {/* Anti-screenshot awareness */}
-                                <div className="absolute bottom-4 right-4 z-[60] bg-black/60 px-3 py-1 rounded-md text-[8px] font-bold text-gray-500 uppercase">
-                                    Encrypted Viewport: Session ID {Math.random().toString(36).substring(7)}
-                                </div>
+                        {/* Fullscreen Body */}
+                        <div className="flex-grow relative bg-slate-950 no-select">
+                            <div className="absolute inset-0 z-[205] bg-transparent cursor-default pointer-events-none"
+                                style={{ backgroundImage: "radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 100%)" }}
+                            />
+
+                            {/* Watermark */}
+                            <div className="absolute inset-0 z-[206] pointer-events-none flex items-center justify-center opacity-[0.03] select-none rotate-[-45deg]">
+                                <p className="text-8xl font-black text-white uppercase tracking-[1em]">EDU CHAIN SECURE</p>
                             </div>
 
-                            <p className="text-center text-[10px] text-gray-700 font-bold uppercase tracking-[0.3em]">
-                                Developed for EduChain Assets. Unauthorized redistribution is locked.
-                            </p>
+                            <iframe
+                                src={`${viewingPdf}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
+                                className="w-full h-full border-none shadow-2xl relative z-[204]"
+                                title="EduChain Secure Reader"
+                            />
                         </div>
                     </motion.div>
                 )}
