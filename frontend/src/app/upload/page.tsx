@@ -39,6 +39,9 @@ export default function UploadPage() {
             const signer = await provider.getSigner();
             const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
 
+            // Fetch dynamic gas data to avoid "Failed to fetch" on congested networks
+            const feeData = await provider.getFeeData();
+
             const tx = await contract.registerContent(
                 title,
                 description,
@@ -47,8 +50,8 @@ export default function UploadPage() {
                 ethers.parseEther(price),
                 BigInt(royalty),
                 {
-                    maxPriorityFeePerGas: ethers.parseUnits("30", "gwei"),
-                    maxFeePerGas: ethers.parseUnits("35", "gwei"),
+                    maxPriorityFeePerGas: feeData.maxPriorityFeePerGas ?? ethers.parseUnits("30", "gwei"),
+                    maxFeePerGas: feeData.maxFeePerGas ?? ethers.parseUnits("35", "gwei"),
                 }
             );
 

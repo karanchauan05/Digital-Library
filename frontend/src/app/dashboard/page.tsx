@@ -78,7 +78,7 @@ export default function DashboardPage() {
             const uploads = [];
             let purchasedCount = 0;
             let active = 0;
-            let revenue = 0n;
+            let revenue = BigInt(0);
 
             for (let i = 1; i <= Number(count); i++) {
                 const item = await contract.contents(i);
@@ -125,9 +125,11 @@ export default function DashboardPage() {
             const signer = await provider.getSigner();
             const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
 
+            const feeData = await provider.getFeeData();
+
             const tx = await contract.toggleContentStatus(id, {
-                maxPriorityFeePerGas: ethers.parseUnits("30", "gwei"),
-                maxFeePerGas: ethers.parseUnits("35", "gwei"),
+                maxPriorityFeePerGas: feeData.maxPriorityFeePerGas ?? ethers.parseUnits("30", "gwei"),
+                maxFeePerGas: feeData.maxFeePerGas ?? ethers.parseUnits("35", "gwei"),
             });
             await tx.wait();
             await init();

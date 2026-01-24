@@ -79,10 +79,12 @@ export default function LibraryPage() {
             const signer = await provider.getSigner();
             const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
 
+            const feeData = await provider.getFeeData();
+
             const tx = await contract.purchaseContent(id, {
                 value: price,
-                maxPriorityFeePerGas: ethers.parseUnits("30", "gwei"),
-                maxFeePerGas: ethers.parseUnits("35", "gwei"),
+                maxPriorityFeePerGas: feeData.maxPriorityFeePerGas ?? ethers.parseUnits("30", "gwei"),
+                maxFeePerGas: feeData.maxFeePerGas ?? ethers.parseUnits("35", "gwei"),
             });
             await tx.wait();
             alert("Purchase successful!");
