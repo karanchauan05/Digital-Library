@@ -48,3 +48,34 @@ body {
     text-shadow: 0 0 20px rgba(99, 102, 241, 0.6), 0 0 40px rgba(168, 85, 247, 0.4);
   }
 }
+
+/* ANTI-PIRACY PROTECTION */
+@media print {
+  body {
+    display: none !important;
+  }
+}
+
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.pdf-container {
+  position: relative;
+  width: 100%;
+  height: 80vh;
+  background: #111;
+  border-radius: 1.5rem;
+  overflow: hidden;
+}
+
+.pdf-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 50;
+  background: transparent;
+}

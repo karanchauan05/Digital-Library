@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
-import { Unlock, FileText, ExternalLink, ShieldCheck, Database, Key } from "lucide-react";
+import { Unlock, FileText, ExternalLink, ShieldCheck, Database, Key, X, Eye } from "lucide-react";
 import { getGatewayUrl } from "@/lib/pinata";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -16,10 +16,17 @@ const ABI = [
 export default function MyAssetsPage() {
     const [purchasedItems, setPurchasedItems] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [viewingPdf, setViewingPdf] = useState<string | null>(null);
 
     useEffect(() => {
         fetchPurchasedContent();
-    }, []);
+        // Anti-Piracy: Disable Right Click globally when viewing
+        const handleContextMenu = (e: MouseEvent) => {
+            if (viewingPdf) e.preventDefault();
+        };
+        document.addEventListener("contextmenu", handleContextMenu);
+        return () => document.removeEventListener("contextmenu", handleContextMenu);
+    }, [viewingPdf]);
 
     const fetchPurchasedContent = async () => {
         try {
@@ -50,7 +57,7 @@ export default function MyAssetsPage() {
     };
 
     return (
-        <div className="max-w-6xl mx-auto space-y-12 pb-32">
+        <div className="max-w-6xl mx-auto space-y-12 pb-32 no-select">
 
             {/* Page Header */}
             <motion.div
@@ -65,7 +72,7 @@ export default function MyAssetsPage() {
                     <h2 className="text-4xl md:text-5xl font-black uppercase italic tracking-tighter italic leading-none">
                         Private <br /> <span className="text-primary italic">Knowledge Vault</span>
                     </h2>
-                    <p className="text-gray-500 font-medium max-w-md">Your decentralized assets are indexed and ready for decryption.</p>
+                    <p className="text-gray-500 font-medium max-w-md">Your decentralized assets are indexed and ready for decryption. Protected with Anti-Piracy v1.0.</p>
                 </div>
 
                 <div className="flex items-center gap-4">
@@ -116,21 +123,65 @@ export default function MyAssetsPage() {
                                         </p>
                                     </div>
 
-                                    <a
-                                        href={getGatewayUrl(item.fullHash)}
-                                        target="_blank"
+                                    <button
+                                        onClick={() => setViewingPdf(getGatewayUrl(item.fullHash))}
                                         className="btn-primary w-fit text-[10px] px-6 py-3 rounded-xl flex items-center gap-3 font-black uppercase italic tracking-widest leading-none"
                                     >
-                                        <Unlock className="w-3 h-3" />
-                                        Access Data Node
-                                        <ExternalLink className="w-3 h-3 opacity-50" />
-                                    </a>
+                                        <Eye className="w-3 h-3" />
+                                        Launch Secure Viewer
+                                    </button>
                                 </div>
                             </motion.div>
                         ))}
                     </AnimatePresence>
                 </div>
             )}
+
+            {/* Anti-Piracy Viewer Modal */}
+            <AnimatePresence>
+                {viewingPdf && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-xl p-4 md:p-10"
+                    >
+                        <div className="relative w-full max-w-6xl h-full flex flex-col space-y-4">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-4 text-white">
+                                    <ShieldCheck className="w-6 h-6 text-primary" />
+                                    <div>
+                                        <h3 className="font-black uppercase tracking-widest italic text-lg">Secure Asset Node</h3>
+                                        <p className="text-[10px] text-gray-500 font-bold tracking-widest uppercase">Encryption Mode: ACTIVE | No-Print | No-Save</p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setViewingPdf(null)}
+                                    className="p-3 glass rounded-full hover:bg-white/10 transition-colors text-white"
+                                >
+                                    <X className="w-6 h-6" />
+                                </button>
+                            </div>
+
+                            <div className="pdf-container">
+                                {/* The Overlay blocks right-clicks and interactions with the PDF viewer controls */}
+                                <div className="pdf-overlay" />
+                                <iframe
+                                    src={`${viewingPdf}#toolbar=0&navpanes=0&scrollbar=0`}
+                                    className="w-full h-full border-none"
+                                    title="Secure Viewer"
+                                />
+                            </div>
+
+                            <div className="text-center">
+                                <p className="text-[10px] text-gray-700 font-black uppercase tracking-[0.3em]">
+                                    Decrypted exclusively for your session. Unauthorized sharing is blocked.
+                                </p>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {purchasedItems.length === 0 && !loading && (
                 <motion.div
