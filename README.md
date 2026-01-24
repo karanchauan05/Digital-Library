@@ -24,4 +24,4 @@ If deploying to Vercel, ensure the following:
 Deployed on Polygon Amoy at: `0x146cEd605d2BfF0Eee901AE210a24B18BD722d55`
 
 ---
-*Developed for the Hackathon - Revolutionizing Digital Education.*
+*Developed for the PU Code Hackathon 3.0 - Revolutionizing Digital Education.*
