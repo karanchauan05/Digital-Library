@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
-import { Wallet, Menu, X, Library, Cpu, Globe, Activity } from "lucide-react";
+import { Wallet, Menu, X, Library, Cpu } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
@@ -30,10 +30,10 @@ export default function Navbar() {
     };
 
     const navLinks = [
-        { name: "Browse Nodes", href: "/library" },
-        { name: "Deploy", href: "/upload" },
-        { name: "Terminal", href: "/dashboard" },
-        { name: "Inventory", href: "/my-content" },
+        { name: "Browse", href: "/library" },
+        { name: "Upload", href: "/upload" },
+        { name: "Dashboard", href: "/dashboard" },
+        { name: "My Assets", href: "/my-content" },
     ];
 
     return (
@@ -44,14 +44,12 @@ export default function Navbar() {
                 <Link href="/" className="flex items-center space-x-3 group relative">
                     <div className="absolute -inset-2 bg-primary/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition duration-500" />
                     <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 group-hover:rotate-12 transition-transform duration-500">
-                        <Cpu className="text-white w-6 h-6" />
+                        <Library className="text-white w-6 h-6" />
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-xl font-black uppercase italic tracking-tighter leading-none italic">EduChain</span>
-                        <div className="flex items-center gap-1">
-                            <span className="text-[8px] font-black uppercase tracking-[0.3em] text-primary">Library Console</span>
-                            <div className="w-1 h-1 rounded-full bg-green-500 animate-pulse" />
-                        </div>
+                        <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 leading-none">
+                            EduChain Lib
+                        </span>
                     </div>
                 </Link>
 
@@ -61,7 +59,7 @@ export default function Navbar() {
                         <Link
                             key={link.name}
                             href={link.href}
-                            className="text-[11px] font-black uppercase tracking-[0.2em] italic text-gray-400 hover:text-white transition-colors relative group"
+                            className="text-sm font-medium text-gray-400 hover:text-white transition-colors relative group"
                         >
                             {link.name}
                             <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-primary transition-all duration-300 group-hover:w-full" />
@@ -70,21 +68,11 @@ export default function Navbar() {
 
                     <button
                         onClick={connectWallet}
-                        className="btn-primary !rounded-xl !px-6 !py-3 flex items-center space-x-3 group/btn"
+                        className="btn-primary flex items-center space-x-2 text-sm"
                     >
-                        <Wallet className="w-4 h-4 group-hover/btn:rotate-12 transition-transform" />
-                        <span className="text-xs font-black uppercase italic tracking-widest leading-none">
-                            {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : "Connect Node"}
-                        </span>
+                        <Wallet className="w-4 h-4" />
+                        <span>{address ? `${address.slice(0, 6)}...${address.slice(-4)}` : "Connect Wallet"}</span>
                     </button>
-
-                    <div className="flex items-center gap-2 pl-4 border-l border-white/10">
-                        <div className="flex flex-col">
-                            <span className="text-[8px] font-black text-gray-600 uppercase">Latency</span>
-                            <span className="text-[8px] font-black text-green-500 uppercase">24ms</span>
-                        </div>
-                        <Activity className="w-4 h-4 text-green-500/50" />
-                    </div>
                 </div>
 
                 {/* Mobile Toggle */}
@@ -111,14 +99,14 @@ export default function Navbar() {
                                     key={link.name}
                                     href={link.href}
                                     onClick={() => setIsMenuOpen(false)}
-                                    className="text-lg font-black uppercase italic tracking-widest text-gray-400 hover:text-primary transition-colors"
+                                    className="text-lg font-semibold text-gray-400 hover:text-primary transition-colors"
                                 >
                                     {link.name}
                                 </Link>
                             ))}
                             <button
                                 onClick={() => { connectWallet(); setIsMenuOpen(false); }}
-                                className="btn-primary w-full py-5 rounded-2xl font-black uppercase italic tracking-widest"
+                                className="btn-primary w-full py-5 rounded-2xl font-bold"
                             >
                                 {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : "Connect Wallet"}
                             </button>

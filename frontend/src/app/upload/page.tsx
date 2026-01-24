@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { uploadToIPFS, getGatewayUrl } from "@/lib/pinata";
 import { ethers } from "ethers";
-import { CloudUpload, FileText, Percent, Info, Shield, CheckCircle2, Binary, HardDrive, Cpu } from "lucide-react";
+import { CloudUpload, FileText, Percent, Info, Shield, CheckCircle2, Binary, HardDrive, Cpu, IndianRupee } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0x146cEd605d2BfF0Eee901AE210a24B18BD722d55";
@@ -21,8 +21,8 @@ export default function UploadPage() {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
-        if (!file || !preview) return alert("Select both files");
-        if (!window.ethereum) return alert("MetaMask required");
+        if (!file || !preview) return alert("Please select both content and preview files");
+        if (!window.ethereum) return alert("Please install MetaMask");
 
         try {
             // 1. IPFS Preview
@@ -72,37 +72,29 @@ export default function UploadPage() {
                     animate={{ opacity: 1, x: 0 }}
                     className="w-full lg:w-1/3 space-y-8"
                 >
-                    <div className="space-y-4">
-                        <h2 className="text-4xl font-black uppercase italic tracking-tighter italic">
-                            Node <br /> <span className="text-primary italic">Deployment</span>
+                    <div className="space-y-4 text-center lg:text-left">
+                        <h2 className="text-4xl font-black italic tracking-tighter">
+                            Upload <br /> <span className="text-primary italic">Content</span>
                         </h2>
-                        <p className="text-gray-500 font-medium">Broadcast your knowledge to the decentralized network. Securely, permanently, forever.</p>
+                        <p className="text-gray-500 font-medium tracking-tight">Protect your educational IP with blockchain encryption and earn automated royalties.</p>
                     </div>
 
                     <div className="space-y-4">
                         {[
-                            { icon: Shield, title: "Zero-Knowledge Storage", desc: "Full hashes are only revealed to verified licensors." },
-                            { icon: HardDrive, title: "IPFS Redundancy", desc: "Distributed across Pinata's global edge network." },
-                            { icon: Cpu, title: "Gas Optimized", desc: "Direct contract calls with EIP-1559 priority." }
+                            { icon: Shield, title: "Anti-Piracy", desc: "Files are stored on IPFS and accessed via Smart Contracts." },
+                            { icon: HardDrive, title: "Decentralized Hosting", desc: "Permanently stored on IPFS node network." },
+                            { icon: IndianRupee, title: "Automated Royalties", desc: "Direct peer-to-peer payments on the blockchain." }
                         ].map((stat, i) => (
                             <div key={i} className="glass border-white/5 p-4 rounded-2xl flex gap-4">
                                 <div className="p-2 bg-primary/10 rounded-lg h-fit">
                                     <stat.icon className="w-5 h-5 text-primary" />
                                 </div>
                                 <div>
-                                    <h4 className="text-sm font-black uppercase tracking-tight">{stat.title}</h4>
+                                    <h4 className="text-sm font-bold tracking-tight">{stat.title}</h4>
                                     <p className="text-xs text-gray-500 font-medium">{stat.desc}</p>
                                 </div>
                             </div>
                         ))}
-                    </div>
-
-                    <div className="glass-card !bg-primary/[0.03] !border-primary/20">
-                        <div className="flex items-center gap-3 mb-2">
-                            <Info className="w-4 h-4 text-primary" />
-                            <span className="text-[10px] font-black uppercase tracking-widest">Network Notice</span>
-                        </div>
-                        <p className="text-xs text-gray-400 leading-relaxed">Ensure you have balanced POL for gas fees. Each deployment generates 2 IPFS nodes and 1 Polygon transaction.</p>
                     </div>
                 </motion.div>
 
@@ -130,17 +122,17 @@ export default function UploadPage() {
                                             <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto shadow-[0_0_30px_#22c55e]">
                                                 <CheckCircle2 className="w-10 h-10 text-white" />
                                             </div>
-                                            <h3 className="text-2xl font-black uppercase italic">Node Active</h3>
-                                            <p className="text-gray-500 font-medium italic">Your resource is now live on the Polygon Amoy Testnet.</p>
+                                            <h3 className="text-2xl font-black italic uppercase">Upload Successful!</h3>
+                                            <p className="text-gray-500 font-medium italic">Your content is now live on the Polygon Amoy Testnet.</p>
                                         </motion.div>
                                     ) : (
                                         <>
                                             <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin" />
                                             <div className="space-y-2">
-                                                <h3 className="text-xl font-black uppercase italic tracking-widest animate-pulse">
-                                                    {status === "ipfs-preview" && "Encrypting Preview..."}
-                                                    {status === "ipfs-full" && "Uplink: Primary Data..."}
-                                                    {status === "blockchain" && "Syncing with Blockchain..."}
+                                                <h3 className="text-xl font-bold italic tracking-widest animate-pulse">
+                                                    {status === "ipfs-preview" && "Uploading Preview..."}
+                                                    {status === "ipfs-full" && "Uploading Full Content..."}
+                                                    {status === "blockchain" && "Registering on Blockchain..."}
                                                 </h3>
                                                 <p className="text-gray-500 font-medium text-xs">Awaiting Network Confirmation...</p>
                                             </div>
@@ -153,21 +145,21 @@ export default function UploadPage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div className="space-y-6">
                                 <div>
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2 block">Content Title</label>
+                                    <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2 block">Content Title</label>
                                     <input
                                         type="text"
                                         className="w-full glass bg-white/[0.02] border-white/10 rounded-2xl py-4 px-6 outline-none focus:ring-2 focus:ring-primary/50 transition-all font-bold"
-                                        placeholder="Quantum Physics Core..."
+                                        placeholder="Enter Title..."
                                         value={title}
                                         onChange={(e) => setTitle(e.target.value)}
                                         required
                                     />
                                 </div>
                                 <div>
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2 block">Specifications / Description</label>
+                                    <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2 block">Description</label>
                                     <textarea
                                         className="w-full glass bg-white/[0.02] border-white/10 rounded-2xl py-4 px-6 outline-none focus:ring-2 focus:ring-primary/50 transition-all font-bold h-32"
-                                        placeholder="Enter node payload details..."
+                                        placeholder="Describe your content..."
                                         value={description}
                                         onChange={(e) => setDescription(e.target.value)}
                                         required
@@ -178,7 +170,7 @@ export default function UploadPage() {
                             <div className="space-y-6">
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2 block">Price (POL)</label>
+                                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2 block">Price (POL)</label>
                                         <input
                                             type="number"
                                             step="0.001"
@@ -190,7 +182,7 @@ export default function UploadPage() {
                                         />
                                     </div>
                                     <div>
-                                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2 block">Royalty (%)</label>
+                                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2 block">Royalty (%)</label>
                                         <input
                                             type="number"
                                             className="w-full glass bg-white/[0.02] border-white/10 rounded-2xl py-4 px-6 outline-none focus:ring-2 focus:ring-primary/50 transition-all font-bold"
@@ -204,7 +196,7 @@ export default function UploadPage() {
 
                                 <div className="space-y-4">
                                     <div>
-                                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2 block">Preview Visual (Image)</label>
+                                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2 block">Preview Image</label>
                                         <div className="relative group/file">
                                             <input
                                                 type="file"
@@ -214,13 +206,13 @@ export default function UploadPage() {
                                                 required
                                             />
                                             <div className="glass bg-white/[0.02] border-white/10 rounded-2xl p-4 flex items-center justify-between group-hover/file:bg-white/[0.05] transition-colors border-dashed border-2">
-                                                <span className="text-xs font-bold text-gray-400">{preview ? preview.name : "Select Preview Image"}</span>
-                                                <Binary className="w-5 h-5 text-primary opacity-50" />
+                                                <span className="text-xs font-bold text-gray-400">{preview ? preview.name : "Select Preview"}</span>
+                                                <FileText className="w-5 h-5 text-primary opacity-50" />
                                             </div>
                                         </div>
                                     </div>
                                     <div>
-                                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2 block">Full Asset Data (PDF/Video)</label>
+                                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2 block">Full Asset (PDF/Video)</label>
                                         <div className="relative group/file">
                                             <input
                                                 type="file"
@@ -229,7 +221,7 @@ export default function UploadPage() {
                                                 required
                                             />
                                             <div className="glass bg-white/[0.02] border-white/10 rounded-2xl p-4 flex items-center justify-between group-hover/file:bg-white/[0.05] transition-colors border-dashed border-2">
-                                                <span className="text-xs font-bold text-gray-400">{file ? file.name : "Select Asset Payload"}</span>
+                                                <span className="text-xs font-bold text-gray-400">{file ? file.name : "Select Data"}</span>
                                                 <CloudUpload className="w-5 h-5 text-primary opacity-50" />
                                             </div>
                                         </div>
@@ -240,10 +232,9 @@ export default function UploadPage() {
 
                         <button
                             type="submit"
-                            className="w-full btn-primary !py-6 !rounded-3xl text-xl font-black uppercase italic tracking-widest flex items-center justify-center gap-4 group"
+                            className="w-full btn-primary !py-6 !rounded-3xl text-xl font-bold uppercase italic tracking-widest"
                         >
-                            <Binary className="w-6 h-6 group-hover:rotate-12 transition-transform" />
-                            Initialize Deployment
+                            Publish Content
                         </button>
                     </form>
                 </motion.div>
