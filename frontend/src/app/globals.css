@@ -3,33 +3,59 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 15, 23, 42;
-  --background-start-rgb: 255, 255, 255;
-  --background-end-rgb: 242, 244, 247;
+  --foreground-rgb: 255, 255, 255;
+  --background-rgb: 0, 0, 0;
+  --primary: #FF6B00;
+  --secondary: #00D1FF;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: white;
+  background: black;
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Texture Overlay */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("https://grainy-gradients.vercel.app/noise.svg");
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 9999;
 }
 
 @layer components {
   .glass {
-    @apply bg-white/70 backdrop-blur-xl border border-slate-200 shadow-xl;
+    @apply bg-surface/80 backdrop-blur-2xl border border-white/5 shadow-2xl;
   }
 
   .glass-card {
-    @apply bg-white rounded-xl p-6 border border-slate-200 transition-all duration-500 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-primary/10;
+    @apply bg-surface rounded-sm p-8 border border-white/5 transition-all duration-500 hover:border-primary/20 hover:bg-surface/90 relative overflow-hidden;
+  }
+
+  /* Bento Card Style */
+  .bento-card {
+    @apply bg-surface border border-white/5 rounded-sm p-6 flex flex-col justify-between transition-all duration-500 hover:bg-neutral-900;
   }
 
   .btn-primary {
-    @apply px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-lg font-bold tracking-tight transition-all duration-300 hover:opacity-90 hover:shadow-lg active:scale-95 disabled:opacity-50;
+    @apply px-8 py-4 bg-primary text-black rounded-sm font-black tracking-tighter uppercase transition-all duration-300 hover:bg-white hover:scale-[1.02] active:scale-95 disabled:opacity-50;
   }
 
   .btn-secondary {
-    @apply px-6 py-3 bg-slate-100/50 border border-slate-200 rounded-lg font-bold tracking-tight transition-all duration-300 hover:bg-slate-100 active:scale-95;
+    @apply px-8 py-4 bg-transparent border border-white/20 text-white rounded-sm font-black tracking-tighter uppercase transition-all duration-300 hover:bg-white hover:text-black active:scale-95;
+  }
+  
+  .solid-border {
+    @apply border border-white/10;
   }
 }
 

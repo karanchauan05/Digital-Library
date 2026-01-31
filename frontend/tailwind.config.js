@@ -9,15 +9,17 @@ module.exports = {
         extend: {
             colors: {
                 primary: {
-                    DEFAULT: "#3b82f6",
-                    dark: "#2563eb",
+                    DEFAULT: "#FF6B00",
+                    dark: "#CC5500",
                 },
                 secondary: {
-                    DEFAULT: "#06b6d4",
-                    dark: "#0891b2",
+                    DEFAULT: "#00D1FF",
+                    dark: "#00A3CC",
                 },
-                background: "#ffffff",
-                surface: "#f8fafc",
+                background: "#000000",
+                surface: "#0A0A0A",
+                accent: "#22C55E",
+                border: "rgba(255, 255, 255, 0.05)",
             },
             backgroundImage: {
                 "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

@@ -3,6 +3,8 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, ShieldCheck, Zap, Coins, Globe, Lock, Sparkles } from "lucide-react";
 
+const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0x146cEd605d2BfF0Eee901AE210a24B18BD722d55";
+
 const FloatingNode = ({ delay, x, y }: { delay: number; x: string; y: string }) => (
     <motion.div
         initial={{ opacity: 0, scale: 0 }}
@@ -23,111 +25,130 @@ const FloatingNode = ({ delay, x, y }: { delay: number; x: string; y: string }) 
 
 export default function Home() {
     return (
-        <div className="relative isolate flex flex-col items-center space-y-32 overflow-hidden">
+        <div className="relative isolate flex flex-col items-center space-y-40 overflow-hidden pb-40">
             {/* Background elements */}
-            <FloatingNode delay={0} x="10%" y="20%" />
-            <FloatingNode delay={2} x="80%" y="40%" />
-            <FloatingNode delay={4} x="40%" y="70%" />
+            <div className="absolute inset-0 -z-10 overflow-hidden">
+                <div className="absolute top-0 left-1/4 w-[1px] h-full bg-white/5" />
+                <div className="absolute top-0 left-2/4 w-[1px] h-full bg-white/5" />
+                <div className="absolute top-0 left-3/4 w-[1px] h-full bg-white/5" />
+                <div className="absolute top-1/4 left-0 w-full h-[1px] bg-white/5" />
+                <div className="absolute top-2/4 left-0 w-full h-[1px] bg-white/5" />
+            </div>
 
             {/* Hero Section */}
-            <section className="relative w-full max-w-5xl px-4 pt-20 pb-10 text-center space-y-10">
+            <section className="relative w-full max-w-7xl px-8 pt-40 text-left grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                 <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, x: -50 }}
+                    animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="space-y-6"
+                    className="space-y-12"
                 >
-                    <div className="inline-flex items-center gap-2 px-4 py-2 glass rounded-full border-slate-200 text-xs font-semibold text-primary mb-4">
-                        <Sparkles className="w-3 h-3" /> Powered by Polygon Amoy
+                    <div className="inline-flex items-center gap-4 px-4 py-1.5 border border-primary/30 bg-primary/5 text-primary text-[10px] font-black uppercase tracking-[0.4em]">
+                        POLYGON_PROTOCOL_AMOY
                     </div>
-                    <h1 className="text-6xl md:text-8xl font-black tracking-tight leading-[0.9]">
-                        EDUCATE & <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary animate-glow bg-[length:200%_auto] bg-animate-gradient drop-shadow-[0_0_15px_rgba(59,130,246,0.2)]">
-                            EARN SECURELY
-                        </span>
+
+                    <h1 className="text-[120px] font-black tracking-tighter leading-[0.75] uppercase flex flex-col">
+                        Decentralized
+                        <span className="text-primary italic">Learning</span>
+                        Node
                     </h1>
-                    <p className="max-w-2xl mx-auto text-slate-600 text-lg md:text-xl font-medium">
-                        The first blockchain-powered educational library on Polygon.
-                        Protect your IP, earn royalties, and share knowledge with the world.
+
+                    <p className="max-w-md text-neutral-500 text-lg font-bold uppercase tracking-tight leading-tight">
+                        The ultimate vault for high-fidelity educational nodes. Encrypted, permanent, and creator-first.
                     </p>
+
+                    <div className="flex flex-col sm:flex-row gap-4 pt-10">
+                        <Link href="/library" className="btn-primary !px-12 !py-6 !text-lg flex items-center justify-center gap-4 !bg-primary !text-black italic">
+                            BORROW_DATA
+                            <ArrowRight className="w-5 h-5 -rotate-45" />
+                        </Link>
+                        <Link href="/upload" className="btn-secondary !px-12 !py-6 !text-lg flex items-center justify-center gap-4 !border-white !text-white italic">
+                            DEPLOY_MODULE
+                        </Link>
+                    </div>
                 </motion.div>
 
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
+                    initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.6 }}
-                    className="flex flex-col sm:flex-row gap-4 justify-center"
+                    transition={{ duration: 1.2, ease: "circOut" }}
+                    className="relative group"
                 >
-                    <Link href="/library" className="btn-primary group flex items-center justify-center gap-3 px-10 py-5 rounded-lg">
-                        <span className="text-lg">Explore Library</span>
-                        <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                    </Link>
-                    <Link href="/upload" className="btn-secondary flex items-center justify-center gap-3 px-10 py-5 rounded-lg">
-                        <span className="text-lg font-bold">Start Uploading</span>
-                    </Link>
-                </motion.div>
-
-                {/* Hero Image */}
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.8, duration: 1 }}
-                    className="relative w-full aspect-video md:aspect-[21/9] rounded-xl overflow-hidden border border-slate-200 shadow-2xl mt-16"
-                >
-                    <img
-                        src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=1200"
-                        alt="Education"
-                        className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-white/20 via-transparent to-transparent" />
+                    <div className="absolute -inset-10 bg-primary/20 blur-[120px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                    <div className="aspect-square relative flex items-center justify-center border border-white/10 p-2 overflow-hidden bg-neutral-900 rounded-sm">
+                        <img
+                            src="https://plus.unsplash.com/premium_photo-1661877737564-3dfd7282efcb?q=80&w=2100&auto=format&fit=crop"
+                            alt="Node Visualization"
+                            className="w-full h-full object-cover grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-1000"
+                        />
+                        <div className="absolute inset-x-0 bottom-0 p-10 bg-gradient-to-t from-black via-black/40 to-transparent">
+                            <div className="flex items-center gap-3">
+                                <div className="w-3 h-3 bg-primary animate-pulse rounded-full" />
+                                <span className="text-[10px] font-black uppercase tracking-[0.5em] text-white">SYSTEM_ID: {CONTRACT_ADDRESS.slice(0, 10)}...</span>
+                            </div>
+                        </div>
+                    </div>
                 </motion.div>
             </section>
 
-            {/* Features Section */}
-            <section className="w-full max-w-7xl px-4 grid grid-cols-1 md:grid-cols-3 gap-8 pb-32">
-                {[
-                    {
-                        title: "Anti-Piracy",
-                        desc: "Content hashes are encrypted and gated by smart contracts. Only owners can access the full content.",
-                        icon: ShieldCheck,
-                        color: "from-blue-400 to-cyan-300",
-                        image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=400"
-                    },
-                    {
-                        title: "Automated Royalties",
-                        desc: "Smart contracts ensure creators get paid instantly for every purchase without any middleman.",
-                        icon: Coins,
-                        color: "from-teal-400 to-emerald-300",
-                        image: "https://images.unsplash.com/photo-1554224155-169641357599?auto=format&fit=crop&q=80&w=400"
-                    },
-                    {
-                        title: "Global Library",
-                        desc: "Decentralized storage powered by IPFS ensures your educational legacy lives forever on the web.",
-                        icon: Zap,
-                        color: "from-sky-400 to-indigo-300",
-                        image: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&q=80&w=400"
-                    }
-                ].map((feature, idx) => (
-                    <motion.div
-                        key={idx}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: idx * 0.2 }}
-                        className="glass-card group relative p-0 overflow-hidden !rounded-xl"
-                    >
-                        <div className="h-48 overflow-hidden">
-                            <img src={feature.image} alt={feature.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80" />
+
+            {/* Feature Bento */}
+            <section className="w-full max-w-7xl px-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-1 bg-white/5 border border-white/10">
+                    <div className="md:col-span-2 p-16 bg-neutral-900 flex flex-col justify-between space-y-20 border border-white/5">
+                        <h2 className="text-6xl font-black uppercase tracking-tighter leading-none italic">
+                            Immutable<br />Protocol
+                        </h2>
+                        <div className="space-y-4">
+                            <span className="text-[10px] font-black text-neutral-600 uppercase tracking-widest italic">Node Status</span>
+                            <p className="text-neutral-400 text-sm font-bold uppercase tracking-tight leading-relaxed max-w-sm">
+                                Every asset is hashed onto IPFS and registered via a non-interactive zero-knowledge verification contract.
+                            </p>
                         </div>
-                        <div className="p-8">
-                            <div className={`w-12 h-12 bg-gradient-to-br ${feature.color} rounded-lg flex items-center justify-center mb-6 shadow-lg shadow-slate-200`}>
-                                <feature.icon className="text-white w-6 h-6" />
-                            </div>
-                            <h3 className="text-2xl font-bold mb-4">{feature.title}</h3>
-                            <p className="text-slate-600 leading-relaxed font-medium">{feature.desc}</p>
+                    </div>
+
+                    <div className="p-16 bg-neutral-900 space-y-12 border border-white/5 hover:bg-neutral-800 transition-colors group">
+                        <div className="w-12 h-12 bg-white flex items-center justify-center group-hover:bg-primary transition-colors">
+                            <ShieldCheck className="w-6 h-6 text-black" />
                         </div>
-                    </motion.div>
-                ))}
+                        <h3 className="text-2xl font-black uppercase tracking-tighter leading-tight">Secure Vault</h3>
+                        <p className="text-[10px] font-bold text-neutral-500 uppercase tracking-tight leading-relaxed">
+                            Enterprise-grade DRM (Digital Rights Management) via encrypted file chunking.
+                        </p>
+                    </div>
+
+                    <div className="p-16 bg-primary space-y-12 border border-white/5 flex flex-col justify-between">
+                        <div className="w-12 h-12 bg-black flex items-center justify-center">
+                            <Zap className="w-6 h-6 text-primary" />
+                        </div>
+                        <h3 className="text-4xl font-black uppercase tracking-tighter leading-tight text-black italic">
+                            Instant Settlements
+                        </h3>
+                    </div>
+
+                    <div className="lg:col-span-2 p-16 bg-neutral-900 border border-white/5 flex flex-col md:flex-row gap-12 items-center">
+                        <div className="w-full h-40 bg-black border border-white/10 relative overflow-hidden flex items-center justify-center">
+                            <span className="text-[8px] font-black text-white italic opacity-20 uppercase tracking-[2em]">DATA_STREAM</span>
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent animate-shimmer" />
+                        </div>
+                        <div className="space-y-6">
+                            <h3 className="text-2xl font-black uppercase tracking-tighter leading-tight italic">Low Fees</h3>
+                            <p className="text-[10px] font-bold text-neutral-500 uppercase tracking-tight leading-relaxed">
+                                Leveraging the efficiency of Polygon Layer 2 for millisecond transaction speeds.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="md:col-span-2 p-16 bg-white flex items-end justify-between border border-white/5">
+                        <h3 className="text-6xl font-black uppercase text-black italic tracking-tighter leading-[0.8]">
+                            Verified<br />Nodes
+                        </h3>
+                        <div className="flex flex-col items-end">
+                            <Globe className="w-10 h-10 text-black mb-4" />
+                            <span className="text-[10px] font-black text-neutral-500 uppercase tracking-widest">Global Reach</span>
+                        </div>
+                    </div>
+                </div>
             </section>
         </div>
     );

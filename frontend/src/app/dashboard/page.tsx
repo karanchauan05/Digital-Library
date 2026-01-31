@@ -62,6 +62,8 @@ export default function DashboardPage() {
     const [loading, setLoading] = useState(true);
     const [userAddress, setUserAddress] = useState("");
     const [actionLoading, setActionLoading] = useState<number | null>(null);
+    const [latency, setLatency] = useState("0ms");
+    const [platformLoad, setPlatformLoad] = useState("0.0%");
 
     // Enable Anti-Piracy features
     useAntiPiracy(true);
@@ -71,7 +73,13 @@ export default function DashboardPage() {
     const init = async () => {
         try {
             if (!window.ethereum) return;
+            const startTime = Date.now();
             const provider = new ethers.BrowserProvider(window.ethereum);
+
+            // Measure Latency
+            await provider.getBlockNumber();
+            setLatency(`${Date.now() - startTime}ms`);
+
             const accounts = await provider.send("eth_requestAccounts", []);
             const address = accounts[0];
             setUserAddress(address);
@@ -85,10 +93,14 @@ export default function DashboardPage() {
             let active = 0;
             let revenue = BigInt(0);
 
+            const forbiddenTitles = ["SS", "MANUSH", "VIDEO"];
+
             for (let i = 1; i <= Number(count); i++) {
                 const item = await contract.contents(i);
                 if (item.creator.toLowerCase() === address.toLowerCase()) {
                     if (!item.isDeleted) {
+                        if (forbiddenTitles.includes(item.title.toUpperCase())) continue;
+
                         uploads.push({
                             id: Number(item.id),
                             title: item.title,
@@ -102,14 +114,17 @@ export default function DashboardPage() {
                     }
                 }
 
-                // For MVP, we estimate revenue based on total library purchases 
-                // In a real app, you'd index events
                 const hasAccess = await contract.checkAccess(i, address);
                 if (hasAccess && item.creator.toLowerCase() !== address.toLowerCase()) {
                     purchasedCount++;
                     revenue += item.price;
                 }
+                if (item.isActive) active++;
             }
+
+            // Calculate Platform Load (Active Nodes / Total Slots)
+            const load = (active / (Number(count) || 1)) * 100;
+            setPlatformLoad(`${load.toFixed(1)}%`);
 
             setMyUploads(uploads.reverse());
             setStats({
@@ -174,90 +189,94 @@ export default function DashboardPage() {
     };
 
     return (
-        <div className="max-w-7xl mx-auto space-y-10 pb-32">
-            {/* Ultra-Modern Header */}
-            <div className="relative group">
-                <div className="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-xl blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
-                <div className="relative glass rounded-xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-10 border border-slate-200">
-                    <div className="space-y-4 text-center md:text-left">
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.2em]"
-                        >
-                            <Cpu className="w-3 h-3" /> System Neural Link: Active
-                        </motion.div>
-                        <h1 className="text-5xl md:text-6xl font-black tracking-tighter leading-none uppercase">
-                            Creator <br />
-                            <span className="text-primary">Terminal</span>
+        <div className="max-w-7xl mx-auto space-y-12 pb-32 pt-10">
+            {/* Header Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-1">
+                <div className="lg:col-span-2 glass-card !bg-neutral-900 border-white/10 p-12">
+                    <div className="space-y-6">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.3em]">
+                            <Cpu className="w-3 h-3" /> Core_Interface_Active
+                        </div>
+                        <h1 className="text-7xl font-black tracking-tighter uppercase leading-[0.8]">
+                            Creator<br />
+                            <span className="text-primary italic">Terminal</span>
                         </h1>
-                        <p className="text-gray-500 font-medium text-lg max-w-md">
-                            Manage your decentralized educational nodes and monitor real-time royalty streams.
+                        <p className="text-neutral-500 font-bold text-sm max-w-sm uppercase tracking-tight">
+                            Manage decentralized nodes and monitor real-time royalty streams within the protocol.
                         </p>
                     </div>
-
-                    <div className="grid grid-cols-2 gap-4 w-full md:w-auto">
-                        <div className="glass-card p-4 flex flex-col items-center justify-center text-center !rounded-xl bg-slate-50 border-slate-200">
-                            <ShieldCheck className="w-8 h-8 text-primary mb-2" />
-                            <p className="text-[10px] uppercase font-bold text-gray-500">Security</p>
-                            <p className="text-sm font-black text-green-500">ENCRYPTED</p>
+                </div>
+                <div className="grid grid-rows-2 gap-1">
+                    <div className="bento-card border-white/10 !bg-primary flex items-center justify-center group cursor-pointer">
+                        <div className="text-center group-hover:scale-110 transition-transform">
+                            <ShieldCheck className="w-12 h-12 text-black mb-2 mx-auto" />
+                            <p className="text-[10px] font-black uppercase text-black">Security_Status</p>
+                            <p className="text-xl font-black text-black">ENCRYPTED</p>
                         </div>
-                        <div className="glass-card p-4 flex flex-col items-center justify-center text-center !rounded-xl bg-slate-50 border-slate-200">
-                            <Zap className="w-8 h-8 text-yellow-500 mb-2" />
-                            <p className="text-[10px] uppercase font-bold text-gray-500">Sync Speed</p>
-                            <p className="text-sm font-black text-white">40ms</p>
+                    </div>
+                    <div className="bento-card border-white/10 !bg-neutral-900 flex items-center justify-center">
+                        <div className="text-center">
+                            <Zap className="w-12 h-12 text-secondary mb-2 mx-auto" />
+                            <p className="text-[10px] font-black uppercase text-neutral-500">Network_Latency</p>
+                            <p className="text-xl font-black text-white">{latency}</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Stats Dashboard */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1 border border-white/10 bg-white/5">
                 <StatCard
-                    label="Active Nodes"
+                    label="Active_Nodes"
                     value={stats.activeCount}
                     icon={Package}
-                    color="from-indigo-600 to-blue-500"
+                    color="from-orange-500 to-red-500"
                     delay={0.1}
-                    subValue="+12% this week"
+                    subValue="SYNC_STABLE"
                 />
                 <StatCard
-                    label="Stream Volume"
+                    label="Stream_Vol"
                     value={`${stats.totalPurchased}`}
                     icon={TrendingUp}
-                    color="from-emerald-600 to-teal-500"
+                    color="from-cyan-500 to-blue-500"
                     delay={0.2}
-                    subValue="Real-time tracking"
+                    subValue="REALTIME_DATA"
                 />
                 <StatCard
-                    label="Total Gas Efficiency"
-                    value="98.2%"
+                    label="Platform_Load"
+                    value={platformLoad}
                     icon={ShieldCheck}
-                    color="from-fuchsia-600 to-purple-500"
+                    color="from-emerald-500 to-green-500"
                     delay={0.3}
                 />
                 <StatCard
-                    label="Total Creations"
+                    label="Total_Ops"
                     value={stats.totalUploads}
                     icon={LayoutDashboard}
-                    color="from-amber-600 to-orange-500"
+                    color="from-purple-500 to-pink-500"
                     delay={0.4}
                 />
             </div>
 
             {/* Main Content Area */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-1 bg-white/5 border border-white/10">
                 {/* Left Listing Column */}
-                <div className="lg:col-span-2 space-y-6">
-                    <div className="flex items-center justify-between px-2">
-                        <h3 className="text-xl font-black uppercase tracking-widest">Node Content</h3>
-                        <div className="h-[1px] flex-grow mx-6 bg-gradient-to-r from-slate-200 to-transparent" />
+                <div className="lg:col-span-2 p-8 space-y-8 bg-neutral-900">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-6">
+                        <h3 className="text-xs font-black uppercase tracking-[0.5em] text-neutral-500 flex items-center gap-4">
+                            <div className="w-2 h-2 bg-primary animate-pulse" /> Registered_Assets
+                        </h3>
+                        <span className="text-[10px] font-mono text-neutral-600">Total Count: {myUploads.length}</span>
                     </div>
 
-                    <div className="space-y-4">
+                    <div className="space-y-1">
                         {loading ? (
                             <div className="py-20 flex justify-center">
-                                <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+                                <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                            </div>
+                        ) : myUploads.length === 0 ? (
+                            <div className="py-40 text-center space-y-4">
+                                <p className="text-[10px] font-black text-neutral-700 uppercase tracking-widest">Zero_Uploads_Detected</p>
                             </div>
                         ) : (
                             <AnimatePresence mode="popLayout">
@@ -265,46 +284,49 @@ export default function DashboardPage() {
                                     <motion.div
                                         layout
                                         key={item.id}
-                                        initial={{ opacity: 0, scale: 0.98 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        className={`glass-card p-5 flex items-center gap-6 group relative overflow-hidden transition-all duration-500 ${!item.isActive ? 'grayscale opacity-50' : 'hover:bg-slate-50'}`}
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        className={`p-6 flex items-center gap-8 group relative border border-white/5 bg-black/40 hover:bg-neutral-800 transition-all ${!item.isActive ? 'opacity-40 grayscale' : ''}`}
                                     >
-                                        <div className="w-24 h-24 rounded-lg overflow-hidden border border-slate-200 relative flex-shrink-0">
-                                            <img src={item.previewUrl} className="w-full h-full object-cover transition duration-700 group-hover:scale-125" />
-                                            {!item.isActive && <div className="absolute inset-0 bg-black/80 flex items-center justify-center text-[10px] font-black tracking-widest text-white uppercase">Offline</div>}
+                                        <div className="w-20 h-20 rounded-sm overflow-hidden border border-white/10 flex-shrink-0 relative">
+                                            <img src={item.previewUrl} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                                            {!item.isActive && <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-[8px] font-black text-white uppercase tracking-widest">OFFLINE</div>}
                                         </div>
 
                                         <div className="flex-grow">
-                                            <div className="flex items-center gap-3">
-                                                <h4 className="text-xl font-black tracking-tight group-hover:text-primary transition-colors">{item.title}</h4>
-                                                <div className={`w-2 h-2 rounded-full ${item.isActive ? 'bg-green-500 shadow-[0_0_8px_#22c55e]' : 'bg-red-500'}`} />
+                                            <div className="flex items-center gap-4">
+                                                <h4 className="text-lg font-black tracking-tight group-hover:text-primary transition-colors uppercase">{item.title}</h4>
+                                                <div className={`text-[8px] px-2 py-0.5 border font-black ${item.isActive ? 'border-accent/40 text-accent' : 'border-red-500/40 text-red-500'}`}>
+                                                    {item.isActive ? 'ACTIVE' : 'LOCKED'}
+                                                </div>
                                             </div>
-                                            <p className="text-gray-500 text-sm mt-1 font-medium line-clamp-1">{item.description}</p>
-                                            <div className="flex items-center gap-6 mt-4">
+                                            <p className="text-neutral-500 text-xs mt-1 font-bold line-clamp-1 uppercase tracking-tighter">{item.description}</p>
+
+                                            <div className="flex items-center gap-8 mt-4">
                                                 <div className="flex flex-col">
-                                                    <span className="text-[8px] font-black uppercase text-gray-600">License Cost</span>
-                                                    <span className="text-sm font-black text-slate-800">{item.price} POL</span>
+                                                    <span className="text-[8px] font-black text-neutral-600 uppercase tracking-widest">License</span>
+                                                    <span className="text-xs font-mono font-bold text-white">{item.price} POL</span>
                                                 </div>
                                                 <div className="flex flex-col">
-                                                    <span className="text-[8px] font-black uppercase text-gray-600">Access ID</span>
-                                                    <span className="text-sm font-mono text-gray-400">#{item.id.toString().padStart(4, '0')}</span>
+                                                    <span className="text-[8px] font-black text-neutral-600 uppercase tracking-widest">ID_CHASH</span>
+                                                    <span className="text-xs font-mono text-neutral-500">#{item.id.toString().padStart(4, '0')}</span>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="flex gap-2">
+                                        <div className="flex gap-1">
                                             <button
                                                 onClick={() => toggleStatus(item.id)}
-                                                className="p-4 rounded-lg glass hover:bg-white/10 hover:text-primary transition-all duration-300"
+                                                className="p-4 bg-white/5 hover:bg-white text-white hover:text-black transition-all"
                                             >
-                                                {item.isActive ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5 text-primary" />}
+                                                {item.isActive ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                             </button>
                                             <button
                                                 onClick={() => handleDelete(item.id)}
                                                 disabled={actionLoading === item.id}
-                                                className="p-4 rounded-lg glass hover:bg-red-500/20 hover:text-red-500 transition-all duration-300 disabled:opacity-50"
+                                                className="p-4 bg-white/5 hover:bg-red-500 text-white hover:text-white transition-all disabled:opacity-50"
                                             >
-                                                <Trash2 className={`w-5 h-5 ${actionLoading === item.id ? 'animate-pulse' : ''}`} />
+                                                <Trash2 className={`w-4 h-4 ${actionLoading === item.id ? 'animate-pulse' : ''}`} />
                                             </button>
                                         </div>
                                     </motion.div>
@@ -315,52 +337,63 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Right Sidebar Info */}
-                <div className="space-y-6">
-                    <div className="glass-card p-8 space-y-8 !rounded-xl bg-gradient-to-b from-primary/5 to-transparent border-primary/20">
-                        <div className="text-center space-y-2">
-                            <h3 className="text-xs font-black uppercase tracking-[0.3em] text-primary">Identity Verified</h3>
-                            <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-primary to-secondary p-[2px] shadow-2xl shadow-primary/20">
-                                <div className="w-full h-full rounded-full bg-slate-100 flex items-center justify-center text-3xl font-black text-primary">
-                                    {userAddress.slice(2, 4).toUpperCase()}
-                                </div>
-                            </div>
-                            <p className="font-mono text-[10px] text-gray-500 mt-4 break-all opacity-50 px-4">{userAddress}</p>
+                <div className="p-8 space-y-8 bg-neutral-900 border-l border-white/10">
+                    <div className="text-center space-y-6">
+                        <div className="w-24 h-24 mx-auto rounded-sm bg-neutral-800 border border-white/10 p-4 flex items-center justify-center relative overflow-hidden group">
+                            <div className="absolute inset-0 bg-primary opacity-0 group-hover:opacity-10 transition-opacity" />
+                            <span className="text-4xl font-black text-primary relative z-10">
+                                {userAddress ? userAddress.slice(2, 4).toUpperCase() : "??"}
+                            </span>
                         </div>
-
-                        <div className="space-y-4 pt-4">
-                            <div className="flex justify-between items-center text-sm">
-                                <span className="text-gray-500 font-bold uppercase text-[10px]">Total Revenue</span>
-                                <span className="font-black text-slate-800">{stats.totalRevenue} POL</span>
-                            </div>
-                            <div className="w-full h-[2px] bg-slate-100 rounded-full" />
-                            <div className="flex justify-between items-center text-sm">
-                                <span className="text-gray-500 font-bold uppercase text-[10px]">Smart Contract</span>
-                                <span className="font-mono text-[10px] text-primary">VERIFIED</span>
-                            </div>
+                        <div className="space-y-1">
+                            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-500 italic">User_Identifier</h3>
+                            <p className="font-mono text-[10px] text-white break-all bg-black p-3 border border-white/5">{userAddress || "UNCONNECTED"}</p>
                         </div>
-
-                        <button className="w-full btn-primary !rounded-lg py-4 flex items-center justify-center gap-3 group">
-                            <TrendingUp className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                            ANALYTICS HUB
-                        </button>
                     </div>
 
-                    <div className="glass-card p-6 !rounded-xl border-slate-100 bg-white">
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse" />
-                            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Live Network Activity</h4>
+                    <div className="space-y-4 pt-8 border-t border-white/10">
+                        <div className="flex justify-between items-center bg-black/40 p-4 border border-white/5">
+                            <span className="text-[10px] font-black uppercase text-neutral-500">Accrued_Rev</span>
+                            <span className="font-black text-xl text-primary tracking-tighter">{stats.totalRevenue} POL</span>
                         </div>
-                        <div className="space-y-3">
-                            {[1, 2, 3].map((i) => (
-                                <div key={i} className="flex items-center justify-between text-[10px] font-bold text-gray-500 border-b border-slate-100 pb-2">
-                                    <span>Sync Request #{740 + i}</span>
-                                    <span className="text-green-500">COMPLETED</span>
-                                </div>
-                            ))}
+                        <div className="flex justify-between items-center bg-black/40 p-4 border border-white/5">
+                            <span className="text-[10px] font-black uppercase text-neutral-500">Protocol_Status</span>
+                            <span className={`text-[10px] font-black tracking-[0.2em] ${userAddress ? 'text-accent' : 'text-red-500'}`}>
+                                {userAddress ? 'VERIFIED_SECURE' : 'AUTH_REQUIRED'}
+                            </span>
+                        </div>
+                    </div>
+
+                    <button className="w-full btn-primary !py-6 flex items-center justify-center gap-4 group">
+                        <TrendingUp className="w-5 h-5" />
+                        ANALYTICS_HUB
+                    </button>
+
+                    <div className="p-6 border border-white/5 bg-black/20 space-y-4">
+                        <div className="flex items-center gap-3">
+                            <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                            <h4 className="text-[9px] font-black uppercase tracking-[0.3em] text-neutral-500">System_Logs</h4>
+                        </div>
+                        <div className="space-y-2 text-[8px] font-bold text-neutral-600 uppercase">
+                            <div className="flex justify-between border-b border-white/5 pb-2">
+                                <span>SYNC_NODE</span>
+                                <span className="text-accent">SUCCESS</span>
+                            </div>
+                            <div className="flex justify-between border-b border-white/5 pb-2">
+                                <span>AUTH_SIGNER</span>
+                                <span className={userAddress ? "text-accent" : "text-red-500"}>
+                                    {userAddress ? "RESOLVED" : "PENDING"}
+                                </span>
+                            </div>
+                            <div className="flex justify-between border-b border-white/5 pb-2">
+                                <span>CONTRACT_LINK</span>
+                                <span className="text-accent">CONNECTED</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     );
+
 }

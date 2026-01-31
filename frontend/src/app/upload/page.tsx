@@ -66,182 +66,195 @@ export default function UploadPage() {
     };
 
     return (
-        <div className="max-w-6xl mx-auto space-y-12 pb-32">
-            <div className="flex flex-col lg:flex-row gap-12">
+        <div className="max-w-4xl mx-auto space-y-12 pb-40 pt-10">
+            {/* Deployment Header */}
+            <div className="space-y-4 border-b border-white/10 pb-12">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-accent/10 border border-accent/20 text-accent text-[10px] font-black uppercase tracking-[0.3em]">
+                    NODE_VIVIFICATION_PROCEDURE
+                </div>
+                <h1 className="text-7xl font-black tracking-tighter uppercase leading-[0.8]">
+                    Deploy<br />
+                    <span className="text-accent italic">Module</span>
+                </h1>
+                <p className="text-neutral-500 font-bold text-sm max-w-sm uppercase tracking-tight">
+                    Register encrypted educational data on the decentralized ledger.
+                </p>
+            </div>
 
-                {/* Information Sidebar */}
-                <motion.div
-                    initial={{ opacity: 0, x: -30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="w-full lg:w-1/3 space-y-8"
-                >
-                    <div className="space-y-4 text-center lg:text-left">
-                        <h2 className="text-4xl font-black tracking-tighter">
-                            Upload <br /> <span className="text-primary">Content</span>
-                        </h2>
-                        <p className="text-gray-500 font-medium tracking-tight">Protect your educational IP with blockchain encryption and earn automated royalties.</p>
-                    </div>
-
-                    <div className="space-y-4">
-                        {[
-                            { icon: Shield, title: "Anti-Piracy", desc: "Files accessible only via authenticated Smart Contract ownership." },
-                            { icon: Binary, title: "Millisecond Chunking", desc: "Videos are rendered in encrypted chunks to prevent screen recording and ripping." },
-                            { icon: HardDrive, title: "Decentralized Hosting", desc: "Permanently stored on IPFS node network." },
-                            { icon: IndianRupee, title: "Automated Royalties", desc: "Direct peer-to-peer payments on the blockchain." }
-                        ].map((stat, i) => (
-                            <div key={i} className="glass border-slate-200 p-4 rounded-xl flex gap-4">
-                                <div className="p-2 bg-primary/10 rounded-lg h-fit">
-                                    <stat.icon className="w-5 h-5 text-primary" />
-                                </div>
-                                <div>
-                                    <h4 className="text-sm font-bold tracking-tight">{stat.title}</h4>
-                                    <p className="text-xs text-gray-500 font-medium">{stat.desc}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </motion.div>
-
-                {/* Form Area */}
-                <motion.div
-                    initial={{ opacity: 0, x: 30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="flex-grow"
-                >
-                    <form onSubmit={handleSubmit} className="glass-card !p-10 space-y-8 !rounded-xl relative overflow-hidden">
-                        <AnimatePresence>
-                            {status !== "idle" && (
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    className="absolute inset-0 z-50 glass backdrop-blur-2xl flex flex-col items-center justify-center space-y-6 text-center"
-                                >
-                                    {status === "success" ? (
-                                        <motion.div
-                                            initial={{ scale: 0 }}
-                                            animate={{ scale: 1 }}
-                                            className="space-y-4"
-                                        >
-                                            <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto shadow-[0_0_30px_#22c55e]">
-                                                <CheckCircle2 className="w-10 h-10 text-white" />
-                                            </div>
-                                            <h3 className="text-2xl font-black uppercase">Upload Successful!</h3>
-                                            <p className="text-gray-500 font-medium">Your content is now live on the Polygon Amoy Testnet.</p>
-                                        </motion.div>
-                                    ) : (
-                                        <>
-                                            <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-                                            <div className="space-y-2">
-                                                <h3 className="text-xl font-bold tracking-widest animate-pulse">
-                                                    {status === "ipfs-preview" && "Uploading Preview..."}
-                                                    {status === "ipfs-full" && "Uploading Full Content..."}
-                                                    {status === "blockchain" && "Registering on Blockchain..."}
-                                                </h3>
-                                                <p className="text-gray-500 font-medium text-xs">Awaiting Network Confirmation...</p>
-                                            </div>
-                                        </>
-                                    )}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-1 bg-white/5 border border-white/10 p-1 relative overflow-hidden">
+                <AnimatePresence>
+                    {status !== "idle" && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="absolute inset-0 z-50 bg-black/95 backdrop-blur-2xl flex flex-col items-center justify-center space-y-8 text-center p-10"
+                        >
+                            {status === "success" ? (
+                                <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="space-y-6">
+                                    <div className="w-24 h-24 bg-accent rounded-sm flex items-center justify-center mx-auto shadow-[0_0_50px_rgba(34,197,94,0.3)]">
+                                        <CheckCircle2 className="w-12 h-12 text-black" />
+                                    </div>
+                                    <h3 className="text-4xl font-black uppercase tracking-tighter">Protocol_Link_Success</h3>
+                                    <p className="text-neutral-500 font-bold uppercase text-[10px] tracking-widest">Asset registered on Polygon Protocol</p>
+                                    <button onClick={() => setStatus("idle")} className="btn-secondary !py-4 !px-10">ACKNOWLEDGE</button>
                                 </motion.div>
+                            ) : (
+                                <>
+                                    <div className="w-20 h-20 border-2 border-accent border-t-transparent rounded-sm animate-spin" />
+                                    <div className="space-y-2">
+                                        <h3 className="text-2xl font-black uppercase tracking-tighter animate-pulse text-accent">
+                                            {status === "ipfs-preview" && "Streaming_Preview_Metadata..."}
+                                            {status === "ipfs-full" && "Uploading_Core_Payload..."}
+                                            {status === "blockchain" && "Linking_Neural_Contract..."}
+                                        </h3>
+                                        <p className="text-neutral-500 font-bold text-[10px] uppercase tracking-[0.3em]">Network_Confirmation_Pending</p>
+                                    </div>
+                                </>
                             )}
-                        </AnimatePresence>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div className="space-y-6">
-                                <div>
-                                    <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2 block">Content Title</label>
-                                    <input
-                                        type="text"
-                                        className="w-full bg-slate-50 border border-slate-200 rounded-lg py-4 px-6 outline-none focus:ring-2 focus:ring-primary/50 focus:bg-white transition-all font-bold"
-                                        placeholder="Enter Title..."
-                                        value={title}
-                                        onChange={(e) => setTitle(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2 block">Description</label>
-                                    <textarea
-                                        className="w-full bg-slate-50 border border-slate-200 rounded-lg py-4 px-6 outline-none focus:ring-2 focus:ring-primary/50 focus:bg-white transition-all font-bold h-32"
-                                        placeholder="Describe your content..."
-                                        value={description}
-                                        onChange={(e) => setDescription(e.target.value)}
-                                        required
-                                    />
-                                </div>
+                <div className="lg:col-span-2 bg-neutral-900 p-10 space-y-12">
+                    <form onSubmit={handleSubmit} className="space-y-8">
+                        <div className="space-y-8">
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black text-neutral-500 uppercase tracking-widest pl-1 italic">Module_Identity</label>
+                                <input
+                                    type="text"
+                                    placeholder="..."
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    className="w-full bg-black border border-white/10 p-6 font-mono text-sm outline-none focus:border-accent transition-all text-white uppercase tracking-tight"
+                                    required
+                                />
                             </div>
 
-                            <div className="space-y-6">
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2 block">Price (POL)</label>
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black text-neutral-500 uppercase tracking-widest pl-1 italic">Description_Payload</label>
+                                <textarea
+                                    placeholder="..."
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                    className="w-full bg-black border border-white/10 p-6 font-mono text-sm outline-none focus:border-accent transition-all text-white h-40 uppercase tracking-tight leading-relaxed"
+                                    required
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-1 bg-white/5 border border-white/10">
+                                <div className="bg-black p-6 space-y-2">
+                                    <label className="text-[10px] font-black text-neutral-500 uppercase tracking-widest pl-1 italic">Access_Cost (POL)</label>
+                                    <div className="relative">
+                                        <IndianRupee className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-700" />
                                         <input
                                             type="number"
                                             step="0.001"
-                                            className="w-full bg-slate-50 border border-slate-200 rounded-lg py-4 px-6 outline-none focus:ring-2 focus:ring-primary/50 focus:bg-white transition-all font-bold"
-                                            placeholder="0.05"
+                                            placeholder="0.00"
                                             value={price}
                                             onChange={(e) => setPrice(e.target.value)}
-                                            required
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2 block">Royalty (%)</label>
-                                        <input
-                                            type="number"
-                                            className="w-full bg-slate-50 border border-slate-200 rounded-lg py-4 px-6 outline-none focus:ring-2 focus:ring-primary/50 focus:bg-white transition-all font-bold"
-                                            placeholder="10"
-                                            value={royalty}
-                                            onChange={(e) => setRoyalty(e.target.value)}
+                                            className="w-full bg-transparent p-4 pl-10 font-mono text-lg font-black outline-none text-white tracking-tighter"
                                             required
                                         />
                                     </div>
                                 </div>
+                                <div className="bg-black p-6 space-y-2">
+                                    <label className="text-[10px] font-black text-neutral-500 uppercase tracking-widest pl-1 italic">Royalty_Dist (%)</label>
+                                    <div className="relative">
+                                        <Percent className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-700" />
+                                        <input
+                                            type="number"
+                                            placeholder="10"
+                                            value={royalty}
+                                            onChange={(e) => setRoyalty(e.target.value)}
+                                            className="w-full bg-transparent p-4 pl-10 font-mono text-lg font-black outline-none text-white tracking-tighter"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                            </div>
 
-                                <div className="space-y-4">
-                                    <div>
-                                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2 block">Preview Image</label>
-                                        <div className="relative group/file">
-                                            <input
-                                                type="file"
-                                                onChange={(e) => setPreview(e.target.files?.[0] || null)}
-                                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                                                accept="image/*"
-                                                required
-                                            />
-                                            <div className="bg-slate-50 border-slate-200 rounded-lg p-4 flex items-center justify-between group-hover/file:bg-slate-100 transition-colors border-dashed border-2">
-                                                <span className="text-xs font-bold text-gray-400">{preview ? preview.name : "Select Preview"}</span>
-                                                <FileText className="w-5 h-5 text-primary opacity-50" />
-                                            </div>
-                                        </div>
+                            {/* Resource Binding */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-1 bg-white/5 border border-white/10">
+                                <div className="bg-black p-10 flex flex-col items-center text-center space-y-6 group">
+                                    <div className="w-16 h-16 rounded-sm bg-neutral-900 border border-white/5 flex items-center justify-center text-neutral-700 group-hover:text-accent group-hover:border-accent/40 transition-all">
+                                        <FileText className="w-8 h-8" />
                                     </div>
-                                    <div>
-                                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2 block">Full Asset (PDF/Video)</label>
-                                        <div className="relative group/file">
-                                            <input
-                                                type="file"
-                                                onChange={(e) => setFile(e.target.files?.[0] || null)}
-                                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                                                required
-                                            />
-                                            <div className="bg-slate-50 border-slate-200 rounded-lg p-4 flex items-center justify-between group-hover/file:bg-slate-100 transition-colors border-dashed border-2">
-                                                <span className="text-xs font-bold text-gray-400">{file ? file.name : "Select Data"}</span>
-                                                <CloudUpload className="w-5 h-5 text-primary opacity-50" />
-                                            </div>
-                                        </div>
+                                    <div className="space-y-1">
+                                        <p className="text-[10px] font-black text-neutral-500 uppercase tracking-widest">Preview_Metadata</p>
+                                        <p className="text-[8px] font-mono text-neutral-700 uppercase">{file ? file.name : "NO_RESOURCE_BOUND"}</p>
                                     </div>
+                                    <label className="btn-secondary !py-3 !px-6 !text-[10px] cursor-pointer">
+                                        BIND_IMAGE
+                                        <input type="file" className="hidden" accept="image/*" onChange={(e) => setPreview(e.target.files?.[0] || null)} required />
+                                    </label>
+                                </div>
+
+                                <div className="bg-black p-10 flex flex-col items-center text-center space-y-6 group">
+                                    <div className="w-16 h-16 rounded-sm bg-neutral-900 border border-white/5 flex items-center justify-center text-neutral-700 group-hover:text-accent group-hover:border-accent/40 transition-all">
+                                        <CloudUpload className="w-8 h-8" />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <p className="text-[10px] font-black text-neutral-500 uppercase tracking-widest">Core_Payload</p>
+                                        <p className="text-[8px] font-mono text-neutral-700 uppercase">{file ? file.name : "NO_RESOURCE_BOUND"}</p>
+                                    </div>
+                                    <label className="btn-secondary !py-3 !px-6 !text-[10px] cursor-pointer">
+                                        BIND_DATA
+                                        <input type="file" className="hidden" onChange={(e) => setFile(e.target.files?.[0] || null)} required />
+                                    </label>
                                 </div>
                             </div>
                         </div>
 
                         <button
                             type="submit"
-                            className="w-full btn-primary !py-6 !rounded-lg text-xl font-bold uppercase tracking-widest"
+                            className="btn-primary w-full !py-10 flex items-center justify-center gap-6 group !bg-accent hover:!bg-white"
                         >
-                            Publish Content
+                            <Cpu className="w-8 h-8 group-hover:rotate-180 transition-transform duration-1000" />
+                            <span className="text-xl">INITIALIZE_VIVIFICATION</span>
                         </button>
                     </form>
-                </motion.div>
+                </div>
+
+                {/* Status Sidebar */}
+                <div className="bg-neutral-900 border-l border-white/10 p-10 space-y-12">
+                    <div className="space-y-8">
+                        <div className="space-y-4">
+                            <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-neutral-600">Verification_Nodes</h4>
+                            <div className="space-y-3">
+                                {[
+                                    { label: "Ownership_Check", id: "01" },
+                                    { label: "IPFS_Handshake", id: "02" },
+                                    { label: "Contract_Sync", id: "03" }
+                                ].map(v => (
+                                    <div key={v.id} className="flex items-center justify-between border-b border-white/5 pb-2">
+                                        <span className="text-[9px] font-bold text-neutral-500 uppercase italic">{v.label}</span>
+                                        <CheckCircle2 className="w-3 h-3 text-accent transition-all animate-pulse" />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="p-8 bg-black border border-white/5 space-y-2">
+                            <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-neutral-700">Protocol_Fee</h4>
+                            <div className="flex items-end gap-2">
+                                <span className="text-4xl font-black text-white italic tracking-tighter">GAS</span>
+                                <span className="text-xs font-black text-neutral-600 mb-1 tracking-widest">ONLY</span>
+                            </div>
+                        </div>
+
+                        <div className="p-8 border border-white/10 bg-white/5 space-y-4">
+                            <div className="flex items-center gap-3 text-neutral-400">
+                                <Info className="w-4 h-4" />
+                                <h4 className="text-[10px] font-black uppercase tracking-[0.2em]">Deployment_Info</h4>
+                            </div>
+                            <p className="text-[9px] text-neutral-500 font-bold leading-relaxed uppercase tracking-widest">
+                                Assets are hashed via IPFS CIDv1. Verification is handled by the decentralized validator subset.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     );
