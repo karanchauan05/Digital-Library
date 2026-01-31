@@ -106,9 +106,9 @@ export default function LibraryPage() {
     );
 
     return (
-        <div className="max-w-7xl mx-auto space-y-16 pb-40 pt-10">
+        <div className="max-w-7xl mx-auto space-y-8 sm:space-y-16 pb-40 pt-10 px-4 sm:px-8">
             {/* Header Area */}
-            <div className="flex flex-col md:flex-row justify-between items-end gap-12 border-b border-white/10 pb-12">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 md:gap-12 border-b border-white/10 pb-8 md:pb-12">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -117,7 +117,7 @@ export default function LibraryPage() {
                     <div className="inline-flex items-center gap-2 px-3 py-1 bg-secondary/10 border border-secondary/20 text-secondary text-[10px] font-black uppercase tracking-[0.3em]">
                         VAULT_EXPLORER_V2.1
                     </div>
-                    <h2 className="text-8xl font-black tracking-tighter uppercase leading-[0.8] flex flex-col">
+                    <h2 className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tighter uppercase leading-[0.8] flex flex-col">
                         Discover
                         <span className="text-secondary italic">Knowledge</span>
                     </h2>
@@ -136,7 +136,7 @@ export default function LibraryPage() {
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             placeholder="INITIALIZE_SEARCH..."
-                            className="w-full bg-neutral-900 border border-white/10 py-6 pl-16 pr-6 rounded-sm outline-none focus:border-secondary transition-all font-mono text-sm tracking-tight text-white placeholder:text-neutral-700"
+                            className="w-full bg-neutral-900 border border-white/10 py-4 sm:py-6 pl-14 sm:pl-16 pr-6 rounded-sm outline-none focus:border-secondary transition-all font-mono text-sm tracking-tight text-white placeholder:text-neutral-700"
                         />
                     </div>
                 </motion.div>

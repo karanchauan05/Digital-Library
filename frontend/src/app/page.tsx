@@ -36,33 +36,33 @@ export default function Home() {
             </div>
 
             {/* Hero Section */}
-            <section className="relative w-full max-w-7xl px-8 pt-40 text-left grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+            <section className="relative w-full max-w-7xl px-4 sm:px-8 pt-24 sm:pt-40 text-left grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-20 items-center">
                 <motion.div
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="space-y-12"
+                    className="space-y-8 sm:space-y-12"
                 >
-                    <div className="inline-flex items-center gap-4 px-4 py-1.5 border border-primary/30 bg-primary/5 text-primary text-[10px] font-black uppercase tracking-[0.4em]">
+                    <div className="inline-flex items-center gap-4 px-4 py-1.5 border border-primary/30 bg-primary/5 text-primary text-[10px] sm:text-[10px] font-black uppercase tracking-[0.4em]">
                         POLYGON_PROTOCOL_AMOY
                     </div>
 
-                    <h1 className="text-[120px] font-black tracking-tighter leading-[0.75] uppercase flex flex-col">
+                    <h1 className="text-[60px] sm:text-[80px] md:text-[100px] lg:text-[120px] font-black tracking-tighter leading-[0.75] uppercase flex flex-col">
                         Decentralized
                         <span className="text-primary italic">Learning</span>
                         Node
                     </h1>
 
-                    <p className="max-w-md text-neutral-500 text-lg font-bold uppercase tracking-tight leading-tight">
+                    <p className="max-w-md text-neutral-500 text-base sm:text-lg font-bold uppercase tracking-tight leading-tight">
                         The ultimate vault for high-fidelity educational nodes. Encrypted, permanent, and creator-first.
                     </p>
 
-                    <div className="flex flex-col sm:flex-row gap-4 pt-10">
-                        <Link href="/library" className="btn-primary !px-12 !py-6 !text-lg flex items-center justify-center gap-4 !bg-primary !text-black italic">
+                    <div className="flex flex-col sm:flex-row gap-4 pt-4 sm:pt-10">
+                        <Link href="/library" className="btn-primary w-full sm:w-auto !px-12 !py-6 !text-lg flex items-center justify-center gap-4 !bg-primary !text-black italic">
                             BORROW_DATA
                             <ArrowRight className="w-5 h-5 -rotate-45" />
                         </Link>
-                        <Link href="/upload" className="btn-secondary !px-12 !py-6 !text-lg flex items-center justify-center gap-4 !border-white !text-white italic">
+                        <Link href="/upload" className="btn-secondary w-full sm:w-auto !px-12 !py-6 !text-lg flex items-center justify-center gap-4 !border-white !text-white italic">
                             DEPLOY_MODULE
                         </Link>
                     </div>
@@ -72,7 +72,7 @@ export default function Home() {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 1.2, ease: "circOut" }}
-                    className="relative group"
+                    className="relative group hidden sm:block lg:block"
                 >
                     <div className="absolute -inset-10 bg-primary/20 blur-[120px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
                     <div className="aspect-square relative flex items-center justify-center border border-white/10 p-2 overflow-hidden bg-neutral-900 rounded-sm">
@@ -81,7 +81,7 @@ export default function Home() {
                             alt="Node Visualization"
                             className="w-full h-full object-cover grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-1000"
                         />
-                        <div className="absolute inset-x-0 bottom-0 p-10 bg-gradient-to-t from-black via-black/40 to-transparent">
+                        <div className="absolute inset-x-0 bottom-0 p-4 sm:p-10 bg-gradient-to-t from-black via-black/40 to-transparent">
                             <div className="flex items-center gap-3">
                                 <div className="w-3 h-3 bg-primary animate-pulse rounded-full" />
                                 <span className="text-[10px] font-black uppercase tracking-[0.5em] text-white">SYSTEM_ID: {CONTRACT_ADDRESS.slice(0, 10)}...</span>
@@ -93,10 +93,10 @@ export default function Home() {
 
 
             {/* Feature Bento */}
-            <section className="w-full max-w-7xl px-8">
+            <section className="w-full max-w-7xl px-4 sm:px-8">
                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-1 bg-white/5 border border-white/10">
-                    <div className="md:col-span-2 p-16 bg-neutral-900 flex flex-col justify-between space-y-20 border border-white/5">
-                        <h2 className="text-6xl font-black uppercase tracking-tighter leading-none italic">
+                    <div className="md:col-span-2 p-8 sm:p-16 bg-neutral-900 flex flex-col justify-between space-y-12 sm:space-y-20 border border-white/5">
+                        <h2 className="text-4xl sm:text-6xl font-black uppercase tracking-tighter leading-none italic">
                             Immutable<br />Protocol
                         </h2>
                         <div className="space-y-4">
@@ -107,7 +107,7 @@ export default function Home() {
                         </div>
                     </div>
 
-                    <div className="p-16 bg-neutral-900 space-y-12 border border-white/5 hover:bg-neutral-800 transition-colors group">
+                    <div className="p-8 sm:p-16 bg-neutral-900 space-y-8 sm:space-y-12 border border-white/5 hover:bg-neutral-800 transition-colors group">
                         <div className="w-12 h-12 bg-white flex items-center justify-center group-hover:bg-primary transition-colors">
                             <ShieldCheck className="w-6 h-6 text-black" />
                         </div>
@@ -117,16 +117,16 @@ export default function Home() {
                         </p>
                     </div>
 
-                    <div className="p-16 bg-primary space-y-12 border border-white/5 flex flex-col justify-between">
+                    <div className="p-8 sm:p-16 bg-primary space-y-8 sm:space-y-12 border border-white/5 flex flex-col justify-between">
                         <div className="w-12 h-12 bg-black flex items-center justify-center">
                             <Zap className="w-6 h-6 text-primary" />
                         </div>
-                        <h3 className="text-4xl font-black uppercase tracking-tighter leading-tight text-black italic">
+                        <h3 className="text-3xl sm:text-4xl font-black uppercase tracking-tighter leading-tight text-black italic">
                             Instant Settlements
                         </h3>
                     </div>
 
-                    <div className="lg:col-span-2 p-16 bg-neutral-900 border border-white/5 flex flex-col md:flex-row gap-12 items-center">
+                    <div className="lg:col-span-2 p-8 sm:p-16 bg-neutral-900 border border-white/5 flex flex-col md:flex-row gap-8 sm:gap-12 items-center">
                         <div className="w-full h-40 bg-black border border-white/10 relative overflow-hidden flex items-center justify-center">
                             <span className="text-[8px] font-black text-white italic opacity-20 uppercase tracking-[2em]">DATA_STREAM</span>
                             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent animate-shimmer" />
@@ -139,8 +139,8 @@ export default function Home() {
                         </div>
                     </div>
 
-                    <div className="md:col-span-2 p-16 bg-white flex items-end justify-between border border-white/5">
-                        <h3 className="text-6xl font-black uppercase text-black italic tracking-tighter leading-[0.8]">
+                    <div className="md:col-span-2 p-8 sm:p-16 bg-white flex items-end justify-between border border-white/5">
+                        <h3 className="text-4xl sm:text-6xl font-black uppercase text-black italic tracking-tighter leading-[0.8]">
                             Verified<br />Nodes
                         </h3>
                         <div className="flex flex-col items-end">

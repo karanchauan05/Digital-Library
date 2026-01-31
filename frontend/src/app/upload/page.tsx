@@ -66,13 +66,13 @@ export default function UploadPage() {
     };
 
     return (
-        <div className="max-w-4xl mx-auto space-y-12 pb-40 pt-10">
+        <div className="max-w-4xl mx-auto space-y-8 md:space-y-12 pb-40 pt-10 px-4 sm:px-8">
             {/* Deployment Header */}
-            <div className="space-y-4 border-b border-white/10 pb-12">
+            <div className="space-y-4 border-b border-white/10 pb-8 md:pb-12">
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-accent/10 border border-accent/20 text-accent text-[10px] font-black uppercase tracking-[0.3em]">
                     NODE_VIVIFICATION_PROCEDURE
                 </div>
-                <h1 className="text-7xl font-black tracking-tighter uppercase leading-[0.8]">
+                <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tighter uppercase leading-[0.8]">
                     Deploy<br />
                     <span className="text-accent italic">Module</span>
                 </h1>
@@ -88,22 +88,22 @@ export default function UploadPage() {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="absolute inset-0 z-50 bg-black/95 backdrop-blur-2xl flex flex-col items-center justify-center space-y-8 text-center p-10"
+                            className="absolute inset-0 z-50 bg-black/95 backdrop-blur-2xl flex flex-col items-center justify-center space-y-8 text-center p-6 md:p-10"
                         >
                             {status === "success" ? (
                                 <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="space-y-6">
-                                    <div className="w-24 h-24 bg-accent rounded-sm flex items-center justify-center mx-auto shadow-[0_0_50px_rgba(34,197,94,0.3)]">
-                                        <CheckCircle2 className="w-12 h-12 text-black" />
+                                    <div className="w-20 h-20 md:w-24 md:h-24 bg-accent rounded-sm flex items-center justify-center mx-auto shadow-[0_0_50px_rgba(34,197,94,0.3)]">
+                                        <CheckCircle2 className="w-10 h-10 md:w-12 md:h-12 text-black" />
                                     </div>
-                                    <h3 className="text-4xl font-black uppercase tracking-tighter">Protocol_Link_Success</h3>
+                                    <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tighter">Protocol_Link_Success</h3>
                                     <p className="text-neutral-500 font-bold uppercase text-[10px] tracking-widest">Asset registered on Polygon Protocol</p>
                                     <button onClick={() => setStatus("idle")} className="btn-secondary !py-4 !px-10">ACKNOWLEDGE</button>
                                 </motion.div>
                             ) : (
                                 <>
-                                    <div className="w-20 h-20 border-2 border-accent border-t-transparent rounded-sm animate-spin" />
+                                    <div className="w-16 h-16 md:w-20 md:h-20 border-2 border-accent border-t-transparent rounded-sm animate-spin" />
                                     <div className="space-y-2">
-                                        <h3 className="text-2xl font-black uppercase tracking-tighter animate-pulse text-accent">
+                                        <h3 className="text-xl md:text-2xl font-black uppercase tracking-tighter animate-pulse text-accent">
                                             {status === "ipfs-preview" && "Streaming_Preview_Metadata..."}
                                             {status === "ipfs-full" && "Uploading_Core_Payload..."}
                                             {status === "blockchain" && "Linking_Neural_Contract..."}
@@ -116,7 +116,7 @@ export default function UploadPage() {
                     )}
                 </AnimatePresence>
 
-                <div className="lg:col-span-2 bg-neutral-900 p-10 space-y-12">
+                <div className="lg:col-span-2 bg-neutral-900 p-6 md:p-10 space-y-12">
                     <form onSubmit={handleSubmit} className="space-y-8">
                         <div className="space-y-8">
                             <div className="space-y-2">
@@ -126,7 +126,7 @@ export default function UploadPage() {
                                     placeholder="..."
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
-                                    className="w-full bg-black border border-white/10 p-6 font-mono text-sm outline-none focus:border-accent transition-all text-white uppercase tracking-tight"
+                                    className="w-full bg-black border border-white/10 p-5 md:p-6 font-mono text-sm outline-none focus:border-accent transition-all text-white uppercase tracking-tight"
                                     required
                                 />
                             </div>
@@ -137,12 +137,12 @@ export default function UploadPage() {
                                     placeholder="..."
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
-                                    className="w-full bg-black border border-white/10 p-6 font-mono text-sm outline-none focus:border-accent transition-all text-white h-40 uppercase tracking-tight leading-relaxed"
+                                    className="w-full bg-black border border-white/10 p-5 md:p-6 font-mono text-sm outline-none focus:border-accent transition-all text-white h-40 uppercase tracking-tight leading-relaxed"
                                     required
                                 />
                             </div>
 
-                            <div className="grid grid-cols-2 gap-1 bg-white/5 border border-white/10">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 bg-white/5 border border-white/10">
                                 <div className="bg-black p-6 space-y-2">
                                     <label className="text-[10px] font-black text-neutral-500 uppercase tracking-widest pl-1 italic">Access_Cost (POL)</label>
                                     <div className="relative">
@@ -176,13 +176,13 @@ export default function UploadPage() {
 
                             {/* Resource Binding */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-1 bg-white/5 border border-white/10">
-                                <div className="bg-black p-10 flex flex-col items-center text-center space-y-6 group">
+                                <div className="bg-black p-8 sm:p-10 flex flex-col items-center text-center space-y-6 group">
                                     <div className="w-16 h-16 rounded-sm bg-neutral-900 border border-white/5 flex items-center justify-center text-neutral-700 group-hover:text-accent group-hover:border-accent/40 transition-all">
                                         <FileText className="w-8 h-8" />
                                     </div>
                                     <div className="space-y-1">
                                         <p className="text-[10px] font-black text-neutral-500 uppercase tracking-widest">Preview_Metadata</p>
-                                        <p className="text-[8px] font-mono text-neutral-700 uppercase">{file ? file.name : "NO_RESOURCE_BOUND"}</p>
+                                        <p className="text-[8px] font-mono text-neutral-700 uppercase truncate max-w-[150px]">{preview ? preview.name : "NO_RESOURCE_BOUND"}</p>
                                     </div>
                                     <label className="btn-secondary !py-3 !px-6 !text-[10px] cursor-pointer">
                                         BIND_IMAGE
@@ -190,13 +190,13 @@ export default function UploadPage() {
                                     </label>
                                 </div>
 
-                                <div className="bg-black p-10 flex flex-col items-center text-center space-y-6 group">
+                                <div className="bg-black p-8 sm:p-10 flex flex-col items-center text-center space-y-6 group">
                                     <div className="w-16 h-16 rounded-sm bg-neutral-900 border border-white/5 flex items-center justify-center text-neutral-700 group-hover:text-accent group-hover:border-accent/40 transition-all">
                                         <CloudUpload className="w-8 h-8" />
                                     </div>
                                     <div className="space-y-1">
                                         <p className="text-[10px] font-black text-neutral-500 uppercase tracking-widest">Core_Payload</p>
-                                        <p className="text-[8px] font-mono text-neutral-700 uppercase">{file ? file.name : "NO_RESOURCE_BOUND"}</p>
+                                        <p className="text-[8px] font-mono text-neutral-700 uppercase truncate max-w-[150px]">{file ? file.name : "NO_RESOURCE_BOUND"}</p>
                                     </div>
                                     <label className="btn-secondary !py-3 !px-6 !text-[10px] cursor-pointer">
                                         BIND_DATA
@@ -208,16 +208,16 @@ export default function UploadPage() {
 
                         <button
                             type="submit"
-                            className="btn-primary w-full !py-10 flex items-center justify-center gap-6 group !bg-accent hover:!bg-white"
+                            className="btn-primary w-full !py-8 md:!py-10 flex items-center justify-center gap-4 md:gap-6 group !bg-accent hover:!bg-white"
                         >
-                            <Cpu className="w-8 h-8 group-hover:rotate-180 transition-transform duration-1000" />
-                            <span className="text-xl">INITIALIZE_VIVIFICATION</span>
+                            <Cpu className="w-6 h-6 md:w-8 md:h-8 group-hover:rotate-180 transition-transform duration-1000" />
+                            <span className="text-lg md:text-xl">INITIALIZE_VIVIFICATION</span>
                         </button>
                     </form>
                 </div>
 
                 {/* Status Sidebar */}
-                <div className="bg-neutral-900 border-l border-white/10 p-10 space-y-12">
+                <div className="bg-neutral-900 border-l border-white/10 p-6 md:p-10 space-y-12">
                     <div className="space-y-8">
                         <div className="space-y-4">
                             <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-neutral-600">Verification_Nodes</h4>
@@ -238,7 +238,7 @@ export default function UploadPage() {
                         <div className="p-8 bg-black border border-white/5 space-y-2">
                             <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-neutral-700">Protocol_Fee</h4>
                             <div className="flex items-end gap-2">
-                                <span className="text-4xl font-black text-white italic tracking-tighter">GAS</span>
+                                <span className="text-3xl sm:text-4xl font-black text-white italic tracking-tighter">GAS</span>
                                 <span className="text-xs font-black text-neutral-600 mb-1 tracking-widest">ONLY</span>
                             </div>
                         </div>

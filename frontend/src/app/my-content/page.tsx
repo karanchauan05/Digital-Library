@@ -127,21 +127,21 @@ export default function MyAssetsPage() {
     };
 
     return (
-        <div className="max-w-7xl mx-auto space-y-12 pb-40 pt-10">
+        <div className="max-w-7xl mx-auto space-y-12 pb-40 pt-10 px-4 sm:px-8">
             {/* Asset Header */}
-            <div className="border-b border-white/10 pb-12 flex flex-col md:flex-row justify-between items-end gap-8">
+            <div className="border-b border-white/10 pb-8 md:pb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
                 <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="space-y-4">
                     <div className="inline-flex items-center gap-2 px-3 py-1 bg-secondary/10 border border-secondary/20 text-secondary text-[10px] font-black uppercase tracking-[0.3em]">
                         SECURE_VAULT_ACCESS
                     </div>
-                    <h1 className="text-7xl font-black tracking-tighter uppercase leading-[0.8]">
+                    <h1 className="text-5xl sm:text-7xl font-black tracking-tighter uppercase leading-[0.8]">
                         My<br />
                         <span className="text-secondary italic">Inventory</span>
                     </h1>
                 </motion.div>
-                <div className="flex flex-col items-end">
+                <div className="flex flex-col items-start md:items-end">
                     <span className="text-[10px] font-black text-neutral-600 uppercase tracking-widest mb-2">Authenticated_Nodes</span>
-                    <span className="text-5xl font-black text-white italic">{purchasedItems.length}</span>
+                    <span className="text-4xl sm:text-5xl font-black text-white italic">{purchasedItems.length}</span>
                 </div>
             </div>
 
@@ -196,13 +196,13 @@ export default function MyAssetsPage() {
                                     </div>
                                 </div>
 
-                                <div className="p-10 space-y-6 relative z-10">
+                                <div className="p-6 md:p-10 space-y-6 relative z-10">
                                     <div className="space-y-2">
                                         <div className="flex items-center gap-2">
                                             <div className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
                                             <span className="text-[10px] font-black text-secondary uppercase tracking-widest">Access_Granted</span>
                                         </div>
-                                        <h3 className="text-3xl font-black uppercase tracking-tighter leading-none group-hover:text-secondary transition-colors underline decoration-secondary/0 group-hover:decoration-secondary/100 decoration-2 underline-offset-8">
+                                        <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tighter leading-none group-hover:text-secondary transition-colors underline decoration-secondary/0 group-hover:decoration-secondary/100 decoration-2 underline-offset-8">
                                             {item.title}
                                         </h3>
                                     </div>

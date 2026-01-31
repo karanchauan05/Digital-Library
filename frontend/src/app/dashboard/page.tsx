@@ -189,15 +189,15 @@ export default function DashboardPage() {
     };
 
     return (
-        <div className="max-w-7xl mx-auto space-y-12 pb-32 pt-10">
+        <div className="max-w-7xl mx-auto space-y-8 md:space-y-12 pb-32 pt-10 px-4 sm:px-8">
             {/* Header Section */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-1">
-                <div className="lg:col-span-2 glass-card !bg-neutral-900 border-white/10 p-12">
+                <div className="lg:col-span-2 glass-card !bg-neutral-900 border-white/10 p-8 md:p-12">
                     <div className="space-y-6">
                         <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.3em]">
                             <Cpu className="w-3 h-3" /> Core_Interface_Active
                         </div>
-                        <h1 className="text-7xl font-black tracking-tighter uppercase leading-[0.8]">
+                        <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tighter uppercase leading-[0.8]">
                             Creator<br />
                             <span className="text-primary italic">Terminal</span>
                         </h1>
@@ -206,19 +206,19 @@ export default function DashboardPage() {
                         </p>
                     </div>
                 </div>
-                <div className="grid grid-rows-2 gap-1">
-                    <div className="bento-card border-white/10 !bg-primary flex items-center justify-center group cursor-pointer">
+                <div className="grid grid-cols-2 lg:grid-cols-1 lg:grid-rows-2 gap-1 h-full">
+                    <div className="bento-card border-white/10 !bg-primary flex items-center justify-center group cursor-pointer p-6">
                         <div className="text-center group-hover:scale-110 transition-transform">
-                            <ShieldCheck className="w-12 h-12 text-black mb-2 mx-auto" />
-                            <p className="text-[10px] font-black uppercase text-black">Security_Status</p>
-                            <p className="text-xl font-black text-black">ENCRYPTED</p>
+                            <ShieldCheck className="w-8 md:w-12 h-8 md:h-12 text-black mb-2 mx-auto" />
+                            <p className="text-[10px] font-black uppercase text-black">Security</p>
+                            <p className="text-lg md:text-xl font-black text-black">ENCRYPTED</p>
                         </div>
                     </div>
-                    <div className="bento-card border-white/10 !bg-neutral-900 flex items-center justify-center">
+                    <div className="bento-card border-white/10 !bg-neutral-900 flex items-center justify-center p-6">
                         <div className="text-center">
-                            <Zap className="w-12 h-12 text-secondary mb-2 mx-auto" />
-                            <p className="text-[10px] font-black uppercase text-neutral-500">Network_Latency</p>
-                            <p className="text-xl font-black text-white">{latency}</p>
+                            <Zap className="w-8 md:w-12 h-8 md:h-12 text-secondary mb-2 mx-auto" />
+                            <p className="text-[10px] font-black uppercase text-neutral-500">Latency</p>
+                            <p className="text-lg md:text-xl font-black text-white">{latency}</p>
                         </div>
                     </div>
                 </div>
@@ -286,16 +286,16 @@ export default function DashboardPage() {
                                         key={item.id}
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
-                                        className={`p-6 flex items-center gap-8 group relative border border-white/5 bg-black/40 hover:bg-neutral-800 transition-all ${!item.isActive ? 'opacity-40 grayscale' : ''}`}
+                                        className={`p-4 md:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-6 group relative border border-white/5 bg-black/40 hover:bg-neutral-800 transition-all ${!item.isActive ? 'opacity-40 grayscale' : ''}`}
                                     >
-                                        <div className="w-20 h-20 rounded-sm overflow-hidden border border-white/10 flex-shrink-0 relative">
+                                        <div className="w-full sm:w-20 h-40 sm:h-20 rounded-sm overflow-hidden border border-white/10 flex-shrink-0 relative">
                                             <img src={item.previewUrl} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                                             {!item.isActive && <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-[8px] font-black text-white uppercase tracking-widest">OFFLINE</div>}
                                         </div>
 
-                                        <div className="flex-grow">
-                                            <div className="flex items-center gap-4">
-                                                <h4 className="text-lg font-black tracking-tight group-hover:text-primary transition-colors uppercase">{item.title}</h4>
+                                        <div className="flex-grow w-full">
+                                            <div className="flex items-center justify-between sm:justify-start gap-4">
+                                                <h4 className="text-base md:text-lg font-black tracking-tight group-hover:text-primary transition-colors uppercase truncate">{item.title}</h4>
                                                 <div className={`text-[8px] px-2 py-0.5 border font-black ${item.isActive ? 'border-accent/40 text-accent' : 'border-red-500/40 text-red-500'}`}>
                                                     {item.isActive ? 'ACTIVE' : 'LOCKED'}
                                                 </div>
@@ -314,17 +314,17 @@ export default function DashboardPage() {
                                             </div>
                                         </div>
 
-                                        <div className="flex gap-1">
+                                        <div className="flex gap-1 w-full sm:w-auto mt-4 sm:mt-0">
                                             <button
                                                 onClick={() => toggleStatus(item.id)}
-                                                className="p-4 bg-white/5 hover:bg-white text-white hover:text-black transition-all"
+                                                className="flex-1 sm:flex-none p-4 bg-white/5 hover:bg-white text-white hover:text-black transition-all flex items-center justify-center"
                                             >
                                                 {item.isActive ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                             </button>
                                             <button
                                                 onClick={() => handleDelete(item.id)}
                                                 disabled={actionLoading === item.id}
-                                                className="p-4 bg-white/5 hover:bg-red-500 text-white hover:text-white transition-all disabled:opacity-50"
+                                                className="flex-1 sm:flex-none p-4 bg-white/5 hover:bg-red-500 text-white hover:text-white transition-all disabled:opacity-50 flex items-center justify-center"
                                             >
                                                 <Trash2 className={`w-4 h-4 ${actionLoading === item.id ? 'animate-pulse' : ''}`} />
                                             </button>
