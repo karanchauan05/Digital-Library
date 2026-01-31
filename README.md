@@ -12,8 +12,8 @@ If deploying to Vercel, ensure the following:
 2. **Environment Variables**:
    - `PINATA_API_KEY`: Your Pinata API Key
    - `PINATA_SECRET_API_KEY`: Your Pinata JWT/Secret
-   - `NEXT_PUBLIC_CONTRACT_ADDRESS`: `0x146cEd605d2BfF0Eee901AE210a24B18BD722d55`
-   - `NEXT_PUBLIC_PINATA_GATEWAY`: `maroon-acceptable-primate-794.mypinata.cloud`
+   - `NEXT_PUBLIC_CONTRACT_ADDRESS`: Your Wallet public address
+   - `NEXT_PUBLIC_PINATA_GATEWAY`: Your Pinata Gateway
 
 ## 🛠️ Tech Stack
 - **Frontend**: Next.js 14, Tailwind CSS, Framer Motion, Ethers.js
