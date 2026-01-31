@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { uploadToIPFS, getGatewayUrl } from "@/lib/pinata";
+import { uploadToIPFS, getGatewayUrl } from "../../lib/pinata";
 import { ethers } from "ethers";
 import { CloudUpload, FileText, Percent, Info, Shield, CheckCircle2, Binary, HardDrive, Cpu, IndianRupee } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";

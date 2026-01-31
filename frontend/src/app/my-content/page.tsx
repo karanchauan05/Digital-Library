@@ -2,9 +2,10 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { Unlock, ShieldCheck, Database, Key, X, Eye, Lock, FileText, Video } from "lucide-react";
-import { getGatewayUrl } from "@/lib/pinata";
+import { getGatewayUrl } from "../../lib/pinata";
 import { motion, AnimatePresence } from "framer-motion";
-import SecureVideoPlayer from "@/components/SecureVideoPlayer";
+import SecureVideoPlayer from "../../components/SecureVideoPlayer";
+import { useAntiPiracy } from "../../lib/useAntiPiracy";
 
 const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0x146cEd605d2BfF0Eee901AE210a24B18BD722d55";
 const ABI = [
@@ -19,25 +20,11 @@ export default function MyAssetsPage() {
     const [loading, setLoading] = useState(true);
     const [viewingAsset, setViewingAsset] = useState<{ url: string, title: string, type: 'pdf' | 'video' } | null>(null);
 
+    // Enable global anti-piracy features
+    useAntiPiracy(true);
+
     useEffect(() => {
         fetchPurchasedContent();
-
-        const handleKeys = (e: KeyboardEvent) => {
-            if (viewingAsset) {
-                // Block Ctrl+P (Print), Ctrl+S (Save), Ctrl+U (Source), Ctrl+Shift+I (DevTools)
-                if (e.ctrlKey && (e.key === 'p' || e.key === 's' || e.key === 'u' || (e.shiftKey && e.key === 'I'))) {
-                    e.preventDefault();
-                    alert("EduChain Anti-Piracy: Secure mode active. Action Blocked.");
-                }
-            }
-        };
-
-        const handleContextMenu = (e: MouseEvent) => {
-            if (viewingAsset) e.preventDefault();
-        };
-
-        window.addEventListener("keydown", handleKeys);
-        document.addEventListener("contextmenu", handleContextMenu);
 
         if (viewingAsset) {
             document.body.style.overflow = "hidden";
@@ -46,8 +33,6 @@ export default function MyAssetsPage() {
         }
 
         return () => {
-            window.removeEventListener("keydown", handleKeys);
-            document.removeEventListener("contextmenu", handleContextMenu);
             document.body.style.overflow = "auto";
         };
     }, [viewingAsset]);

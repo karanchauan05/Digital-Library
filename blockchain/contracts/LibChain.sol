@@ -19,6 +19,7 @@ contract LibChain is Ownable, ReentrancyGuard {
         address payable creator;
         uint256 royaltyPercentage; // Percentage of resale/restock (kept simple for this MVP)
         bool isActive;
+        bool isDeleted;
     }
 
     uint256 public contentCount;
@@ -28,6 +29,7 @@ contract LibChain is Ownable, ReentrancyGuard {
     event ContentRegistered(uint256 indexed id, string title, address indexed creator, uint256 price);
     event ContentPurchased(uint256 indexed id, address indexed buyer, uint256 price);
     event ContentToggled(uint256 indexed id, bool isActive);
+    event ContentDeleted(uint256 indexed id);
 
     constructor() Ownable(msg.sender) {}
 
@@ -55,7 +57,8 @@ contract LibChain is Ownable, ReentrancyGuard {
             price: _price,
             creator: payable(msg.sender),
             royaltyPercentage: _royaltyPercentage,
-            isActive: true
+            isActive: true,
+            isDeleted: false
         });
 
         // Creator automatically has access
@@ -70,6 +73,7 @@ contract LibChain is Ownable, ReentrancyGuard {
     function purchaseContent(uint256 _contentId) external payable nonReentrant {
         Content storage content = contents[_contentId];
         require(content.isActive, "Content is not available for purchase");
+        require(!content.isDeleted, "Content has been deleted");
         require(msg.value >= content.price, "Insufficient payment");
         require(!hasAccess[_contentId][msg.sender], "You already have access to this content");
 
@@ -88,14 +92,26 @@ contract LibChain is Ownable, ReentrancyGuard {
      */
     function toggleContentStatus(uint256 _contentId) external {
         require(contents[_contentId].creator == msg.sender, "Only creator can toggle status");
+        require(!contents[_contentId].isDeleted, "Cannot toggle deleted content");
         contents[_contentId].isActive = !contents[_contentId].isActive;
         emit ContentToggled(_contentId, contents[_contentId].isActive);
+    }
+
+    /**
+     * @dev Permanently delete content.
+     */
+    function deleteContent(uint256 _contentId) external {
+        require(contents[_contentId].creator == msg.sender, "Only creator can delete");
+        contents[_contentId].isDeleted = true;
+        contents[_contentId].isActive = false;
+        emit ContentDeleted(_contentId);
     }
 
     /**
      * @dev Check if a user has access to content.
      */
     function checkAccess(uint256 _contentId, address _user) external view returns (bool) {
+        if (contents[_contentId].isDeleted && contents[_contentId].creator != _user) return false;
         return hasAccess[_contentId][_user];
     }
 
@@ -105,6 +121,7 @@ contract LibChain is Ownable, ReentrancyGuard {
      * For true anti-piracy, contentHash should be an encrypted string.
      */
     function getContentHash(uint256 _contentId) external view returns (string memory) {
+        require(!contents[_contentId].isDeleted, "Content has been deleted");
         require(hasAccess[_contentId][msg.sender], "Access denied: Purchase required");
         return contents[_contentId].contentHash;
     }

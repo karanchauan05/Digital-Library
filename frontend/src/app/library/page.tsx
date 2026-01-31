@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0x146cEd605d2BfF0Eee901AE210a24B18BD722d55";
 const ABI = [
     "function contentCount() view returns (uint256)",
-    "function contents(uint256) view returns (uint256 id, string title, string description, string previewUrl, string contentHash, uint256 price, address creator, uint256 royaltyPercentage, bool isActive)",
+    "function contents(uint256) view returns (uint256 id, string title, string description, string previewUrl, string contentHash, uint256 price, address creator, uint256 royaltyPercentage, bool isActive, bool isDeleted)",
     "function checkAccess(uint256 contentId, address user) view returns (bool)",
     "function purchaseContent(uint256 contentId) payable"
 ];
@@ -53,7 +53,7 @@ export default function LibraryPage() {
             const fetchedItems = [];
             for (let i = 1; i <= Number(count); i++) {
                 const item = await contract.contents(i);
-                if (item.isActive) {
+                if (item.isActive && !item.isDeleted) {
                     fetchedItems.push({
                         id: item.id,
                         title: item.title,
@@ -61,7 +61,8 @@ export default function LibraryPage() {
                         previewUrl: item.previewUrl,
                         price: item.price,
                         creator: item.creator,
-                        isActive: item.isActive
+                        isActive: item.isActive,
+                        isDeleted: item.isDeleted
                     });
                 }
             }

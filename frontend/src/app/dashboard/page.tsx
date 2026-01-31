@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
+import { useAntiPiracy } from "../../lib/useAntiPiracy";
 import {
     LayoutDashboard,
     Package,
@@ -22,9 +23,10 @@ import { motion, AnimatePresence } from "framer-motion";
 const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0x146cEd605d2BfF0Eee901AE210a24B18BD722d55";
 const ABI = [
     "function contentCount() view returns (uint256)",
-    "function contents(uint256) view returns (uint256 id, string title, string description, string previewUrl, string contentHash, uint256 price, address creator, uint256 royaltyPercentage, bool isActive)",
+    "function contents(uint256) view returns (uint256 id, string title, string description, string previewUrl, string contentHash, uint256 price, address creator, uint256 royaltyPercentage, bool isActive, bool isDeleted)",
     "function checkAccess(uint256 contentId, address user) view returns (bool)",
-    "function toggleContentStatus(uint256 contentId) external"
+    "function toggleContentStatus(uint256 contentId) external",
+    "function deleteContent(uint256 contentId) external"
 ];
 
 const StatCard = ({ label, value, icon: Icon, color, delay, subValue }: any) => (
@@ -61,6 +63,9 @@ export default function DashboardPage() {
     const [userAddress, setUserAddress] = useState("");
     const [actionLoading, setActionLoading] = useState<number | null>(null);
 
+    // Enable Anti-Piracy features
+    useAntiPiracy(true);
+
     useEffect(() => { init(); }, []);
 
     const init = async () => {
@@ -83,15 +88,18 @@ export default function DashboardPage() {
             for (let i = 1; i <= Number(count); i++) {
                 const item = await contract.contents(i);
                 if (item.creator.toLowerCase() === address.toLowerCase()) {
-                    uploads.push({
-                        id: Number(item.id),
-                        title: item.title,
-                        description: item.description,
-                        previewUrl: item.previewUrl,
-                        price: ethers.formatEther(item.price),
-                        isActive: item.isActive
-                    });
-                    if (item.isActive) active++;
+                    if (!item.isDeleted) {
+                        uploads.push({
+                            id: Number(item.id),
+                            title: item.title,
+                            description: item.description,
+                            previewUrl: item.previewUrl,
+                            price: ethers.formatEther(item.price),
+                            isActive: item.isActive,
+                            isDeleted: item.isDeleted
+                        });
+                        if (item.isActive) active++;
+                    }
                 }
 
                 // For MVP, we estimate revenue based on total library purchases 
@@ -135,6 +143,31 @@ export default function DashboardPage() {
             await init();
         } catch (err) {
             console.error(err);
+        } finally {
+            setActionLoading(null);
+        }
+    };
+
+    const handleDelete = async (id: number) => {
+        if (!confirm("Are you sure you want to permanently delete this content? This action cannot be undone.")) return;
+
+        try {
+            setActionLoading(id);
+            const provider = new ethers.BrowserProvider(window.ethereum);
+            const signer = await provider.getSigner();
+            const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+
+            const feeData = await provider.getFeeData();
+
+            const tx = await contract.deleteContent(id, {
+                maxPriorityFeePerGas: feeData.maxPriorityFeePerGas ?? ethers.parseUnits("30", "gwei"),
+                maxFeePerGas: feeData.maxFeePerGas ?? ethers.parseUnits("35", "gwei"),
+            });
+            await tx.wait();
+            await init();
+        } catch (err) {
+            console.error(err);
+            alert("Failed to delete content. Ensure you are the creator.");
         } finally {
             setActionLoading(null);
         }
@@ -267,10 +300,11 @@ export default function DashboardPage() {
                                                 {item.isActive ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5 text-primary" />}
                                             </button>
                                             <button
-                                                onClick={() => toggleStatus(item.id)}
-                                                className="p-4 rounded-lg glass hover:bg-red-500/20 hover:text-red-500 transition-all duration-300"
+                                                onClick={() => handleDelete(item.id)}
+                                                disabled={actionLoading === item.id}
+                                                className="p-4 rounded-lg glass hover:bg-red-500/20 hover:text-red-500 transition-all duration-300 disabled:opacity-50"
                                             >
-                                                <Trash2 className="w-5 h-5" />
+                                                <Trash2 className={`w-5 h-5 ${actionLoading === item.id ? 'animate-pulse' : ''}`} />
                                             </button>
                                         </div>
                                     </motion.div>
